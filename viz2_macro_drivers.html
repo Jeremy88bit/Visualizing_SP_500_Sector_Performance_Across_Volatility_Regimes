@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    #vis.vega-embed {
+      width: 100%;
+      display: flex;
+    }
+
+    #vis.vega-embed details,
+    #vis.vega-embed details summary {
+      position: relative;
+    }
+  </style>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-lite@5.20.1"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+</head>
+<body>
+  <div id="vis"></div>
+  <script>
+    (function(vegaEmbed) {
+      var spec = {"config": {"view": {"continuousWidth": 300, "continuousHeight": 300}, "axis": {"labelFontSize": 11, "titleFontSize": 12}, "font": "Arial", "legend": {"columns": 3, "labelFontSize": 11, "orient": "bottom", "titleFontSize": 12}}, "layer": [{"mark": {"type": "bar", "cornerRadiusEnd": 4, "height": 18}, "encoding": {"color": {"field": "category", "scale": {"domain": ["Macroeconomic", "Volatility", "Momentum", "Trend / Moving Avg", "Range / Bands", "Volume", "Other"], "range": ["#c0392b", "#e67e22", "#2980b9", "#27ae60", "#8e44ad", "#16a085", "#7f8c8d"]}, "title": "Feature Category", "type": "nominal"}, "tooltip": [{"field": "feature_name", "title": "Feature", "type": "nominal"}, {"field": "category", "title": "Category", "type": "nominal"}, {"field": "importance", "format": ".4f", "title": "Importance", "type": "quantitative"}], "x": {"axis": {"format": ".0%"}, "field": "importance", "title": "Feature Importance (Random Forest)", "type": "quantitative"}, "y": {"field": "feature_name", "sort": {"field": "importance", "order": "descending"}, "title": "", "type": "nominal"}}, "title": {"text": "Visualization 3: What Drives Volatility Regimes?", "fontSize": 16, "subtitle": "Top 15 features ranked by Random Forest importance for classifying high vs. normal volatility"}}, {"mark": {"type": "text", "align": "left", "color": "#555", "dx": 4, "fontSize": 11}, "encoding": {"text": {"field": "importance", "format": ".1%", "type": "quantitative"}, "x": {"field": "importance", "type": "quantitative"}, "y": {"field": "feature_name", "sort": {"field": "importance", "order": "descending"}, "type": "nominal"}}}], "data": {"name": "data-0b89a023acf72eab46dea4e07fc32e75"}, "height": 400, "width": 550, "$schema": "https://vega.github.io/schema/vega-lite/v5.20.1.json", "datasets": {"data-0b89a023acf72eab46dea4e07fc32e75": [{"feature": "volatility_20d", "importance": 0.10293493601921884, "category": "Volatility", "feature_name": "Volatility (20-day)"}, {"feature": "atr_ratio", "importance": 0.09697625695432868, "category": "Range / Bands", "feature_name": "ATR Ratio"}, {"feature": "volatility_10d", "importance": 0.08512477065584743, "category": "Volatility", "feature_name": "Volatility (10-day)"}, {"feature": "price_to_ma200", "importance": 0.08460593946115609, "category": "Trend / Moving Avg", "feature_name": "Price / 200-day MA"}, {"feature": "volatility_50d", "importance": 0.07567476633825858, "category": "Volatility", "feature_name": "Volatility (50-day)"}, {"feature": "momentum_6m", "importance": 0.07296497587904896, "category": "Momentum", "feature_name": "Momentum (6-month)"}, {"feature": "bb_width", "importance": 0.05881100405687682, "category": "Range / Bands", "feature_name": "Bollinger Band Width"}, {"feature": "high_low_ratio", "importance": 0.05462018367166261, "category": "Other", "feature_name": "High/Low Ratio"}, {"feature": "momentum_3m", "importance": 0.04587213503562107, "category": "Momentum", "feature_name": "Momentum (3-month)"}, {"feature": "volatility_5d", "importance": 0.04174800800105914, "category": "Volatility", "feature_name": "Volatility (5-day)"}, {"feature": "ma50_distance", "importance": 0.03847548656206155, "category": "Trend / Moving Avg", "feature_name": "Distance from 50-day MA"}, {"feature": "volume_ratio", "importance": 0.037866833266472194, "category": "Volume", "feature_name": "Volume Ratio (10d/50d)"}, {"feature": "ma10_distance", "importance": 0.03620409502679486, "category": "Trend / Moving Avg", "feature_name": "Distance from 10-day MA"}, {"feature": "volatility_ratio", "importance": 0.035985524156304495, "category": "Volatility", "feature_name": "Volatility Ratio (10d/50d)"}, {"feature": "momentum_1m", "importance": 0.03048955208380113, "category": "Momentum", "feature_name": "Momentum (1-month)"}]}};
+      var embedOpt = {"mode": "vega-lite"};
+
+      function showError(el, error){
+          el.innerHTML = ('<div style="color:red;">'
+                          + '<p>JavaScript Error: ' + error.message + '</p>'
+                          + "<p>This usually means there's a typo in your chart specification. "
+                          + "See the javascript console for the full traceback.</p>"
+                          + '</div>');
+          throw error;
+      }
+      const el = document.getElementById('vis');
+      vegaEmbed("#vis", spec, embedOpt)
+        .catch(error => showError(el, error));
+    })(vegaEmbed);
+
+  </script>
+</body>
+</html>
