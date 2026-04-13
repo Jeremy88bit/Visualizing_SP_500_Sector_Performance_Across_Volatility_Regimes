@@ -1,0 +1,16 @@
+feature,importance,feature_name,category
+fed_funds_rate,0.126,Fed Funds Rate,Macroeconomic
+vix,0.109,VIX Index,Macroeconomic
+momentum_6m,0.102,Momentum (6-month),Momentum
+volatility_50d,0.084,Volatility (50-day),Volatility
+volatility_20d,0.081,Volatility (20-day),Volatility
+atr_ratio,0.068,ATR Ratio,Range / Bands
+price_to_ma200,0.053,Price / 200-day MA,Trend
+unemployment_rate,0.043,Unemployment Rate,Macroeconomic
+market_breadth_proxy,0.037,Market Breadth Proxy,Trend
+momentum_3m,0.034,Momentum (3-month),Momentum
+volume_ratio,0.025,Volume Ratio,Volume
+volatility_ratio,0.024,Volatility Ratio,Volatility
+volatility_5d,0.023,Volatility (5-day),Volatility
+bb_width,0.023,Bollinger Band Width,Range / Bands
+rsi,0.021,RSI (14-day),Momentum
