@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Visualizing S&P 500 Volatility Regimes — DS4200</title>
+<title>Visualizing S&P 500 Volatility Regimes | DS4200</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@400;600;700&family=Source+Sans+3:wght@300;400;500;600&display=swap');
 
@@ -264,7 +264,7 @@
 <body>
 
 <div class="hero">
-  <div class="course-info">DS4200 &mdash; Information Presentation &amp; Data Visualization</div>
+  <div class="course-info">DS4200: Information Presentation &amp; Data Visualization</div>
   <h1>Visualizing S&amp;P 500 Volatility Regimes</h1>
   <p class="tagline">How Federal Reserve policy and market sentiment shape risk across six market sectors</p>
   <p style="opacity:0.5; font-size:0.82em; margin-top:12px;">Team Members: Jeremy Sutikno &middot; Qianru Guo &middot; Suprabhat Khanna</p>
@@ -275,7 +275,7 @@
 <section id="introduction">
   <h2>Introduction</h2>
   <p>
-    Market volatility regimes &mdash; sustained periods of high or low price turbulence &mdash; have dramatic consequences
+    Market volatility regimes (sustained periods of high or low price turbulence) have dramatic consequences
     for investors. The 2020 COVID crash erased 34% of the S&amp;P 500's value in just 23 trading days, while
     the 2022 bear market saw a 25% decline driven by aggressive Federal Reserve rate hikes. Yet these events
     did not affect all market sectors equally: Technology stocks collapsed during rate hikes while Energy
@@ -351,11 +351,11 @@
     </h3>
     <p class="muted"><strong style="color:var(--blue);">&#9432; Interaction:</strong> Drag the shaded region on the <em>overview chart at the bottom</em> to zoom into any date range. Hover over the lines for exact values. Click and drag again to reset.</p>
     <div class="link-banner">
-      <strong>Cross-viz link:</strong> Drag a time window in the overview below &mdash; the Return Distribution chart (Viz 5) will automatically update to show only returns from that period.
+      <strong>Cross-viz link:</strong> Drag a time window in the overview below and the Return Distribution chart (Viz 5) will automatically update to show only returns from that period.
     </div>
     <div class="viz-container" id="viz1-container" style="min-height:520px;"></div>
     <div class="takeaway">
-      <strong>Takeaway:</strong> Three distinct high-volatility regimes are visible in the data: the 2018 Q4 rate-scare, the March 2020 COVID crash, and the 2022 rate-hike bear market. These regimes are not symmetric across sectors. During COVID, all six ETFs declined in lockstep within days of each other &mdash; but by end of 2020, XLK had fully recovered and surpassed its pre-crash level while XLE was still down over 30% from its January 2020 price. In the 2022 episode, the divergence ran the other direction: XLE gained roughly 60% over the year as energy prices surged, while XLK fell more than 30% as rate hikes compressed growth valuations. The volatility subplot reinforces this: during the March 2020 spike, all sector volatilities converged near 60&ndash;80% annualized, but during normal periods XLE's rolling volatility runs roughly 2&times; that of XLV.
+      <strong>Takeaway:</strong> Three distinct high-volatility regimes are visible in the data: the 2018 Q4 rate-scare, the March 2020 COVID crash, and the 2022 rate-hike bear market. These regimes are not symmetric across sectors. During COVID, all six ETFs declined in lockstep within days of each other, but by end of 2020, XLK had fully recovered and surpassed its pre-crash level while XLE was still down over 30% from its January 2020 price. In the 2022 episode, the divergence ran the other direction: XLE gained roughly 60% over the year as energy prices surged, while XLK fell more than 30% as rate hikes compressed growth valuations. The volatility subplot reinforces this: during the March 2020 spike, all sector volatilities converged near 60&ndash;80% annualized, but during normal periods XLE's rolling volatility runs roughly 2&times; that of XLV.
     </div>
   </div>
 
@@ -369,7 +369,7 @@
     <p class="muted">This chart ranks the top 15 features that help classify high- versus normal-volatility regimes. <strong style="color:var(--blue);">&#9432; Interaction:</strong> Hover any bar to see a plain-English description of what that feature measures.</p>
     <div class="viz-container" id="viz3-container" style="min-height:420px;"></div>
     <div class="takeaway">
-      <strong>Takeaway:</strong> The top two features &mdash; 20-day realized volatility (10.3%) and ATR ratio (9.7%) &mdash; are both direct measures of recent price turbulence, which makes sense: a regime model trained to predict future volatility naturally leans on current volatility. More interesting is what comes after: 6-month momentum (7.3%) and Price/200-day MA (8.5%) outrank shorter-term signals entirely, suggesting that regime shifts are associated with extended trend breakdowns rather than short-term noise. Crucially, the bottom half of the chart is dominated by momentum and moving-average variants that all measure roughly the same thing &mdash; price trend relative to a baseline &mdash; which means the model's effective information comes from fewer independent signals than the feature count suggests. If the FRED macro series (Fed Funds Rate, VIX) were available in this run, prior versions of the model showed them ranking in the top 3, displacing the pure volatility features. This distinction matters: a model that leads with current volatility is reactive; one that leads with policy rate and VIX levels could in principle be forward-looking.
+      <strong>Takeaway:</strong> The top two features, 20-day realized volatility (10.3%) and ATR ratio (9.7%), are both direct measures of recent price turbulence, which makes sense: a regime model trained to predict future volatility naturally leans on current volatility. More interesting is what comes after: 6-month momentum (7.3%) and Price/200-day MA (8.5%) outrank shorter-term signals entirely, suggesting that regime shifts are associated with extended trend breakdowns rather than short-term noise. Crucially, the bottom half of the chart is dominated by momentum and moving-average variants that all measure roughly the same thing (price trend relative to a baseline), which means the model's effective information comes from fewer independent signals than the feature count suggests. If the FRED macro series (Fed Funds Rate, VIX) were available in this run, prior versions of the model showed them ranking in the top 3, displacing the pure volatility features. This distinction matters: a model that leads with current volatility is reactive; one that leads with policy rate and VIX levels could in principle be forward-looking.
     </div>
   </div>
 
@@ -394,7 +394,7 @@
     </div>
 
     <div class="takeaway">
-      <strong>Takeaway:</strong> The regime shift in correlations is large enough to matter for portfolio construction. In normal volatility, XLE's pairwise correlations with the other sectors average around 0.35&ndash;0.45 &mdash; meaningfully lower than SPY/XLK/XLY, which cluster above 0.70. In high-volatility periods, XLE's correlations jump toward 0.65&ndash;0.75, while the already-high SPY/XLK/XLF cluster pushes above 0.85. The practical implication: a portfolio that looks well-diversified using a full-period correlation matrix (the "All periods" view) is systematically overestimating the diversification benefit it will actually receive during a market stress event. The XLV/XLE pair is the most stable diversifier across regimes &mdash; their correlation rises less sharply than other pairs during high-vol periods, which is consistent with Energy being commodity-driven and Healthcare being demand-inelastic.
+      <strong>Takeaway:</strong> The regime shift in correlations is large enough to matter for portfolio construction. In normal volatility, XLE's pairwise correlations with the other sectors average around 0.35 to 0.45, meaningfully lower than SPY/XLK/XLY, which cluster above 0.70. In high-volatility periods, XLE's correlations jump toward 0.65&ndash;0.75, while the already-high SPY/XLK/XLF cluster pushes above 0.85. The practical implication: a portfolio that looks well-diversified using a full-period correlation matrix (the "All periods" view) is systematically overestimating the diversification benefit it will actually receive during a market stress event. The XLV/XLE pair is the most stable diversifier across regimes: their correlation rises less sharply than other pairs during high-vol periods, which is consistent with Energy being commodity-driven and Healthcare being demand-inelastic.
     </div>
   </div>
 
@@ -409,12 +409,12 @@
     <div class="controls-row">
       <label for="pf-select">Select ETF:</label>
       <select class="ctrl-select" id="pf-select" onchange="updatePortfolio()">
-        <option value="XLE" selected>XLE &mdash; Energy</option>
-        <option value="SPY">SPY &mdash; S&amp;P 500</option>
-        <option value="XLK">XLK &mdash; Technology</option>
-        <option value="XLF">XLF &mdash; Financials</option>
-        <option value="XLV">XLV &mdash; Healthcare</option>
-        <option value="XLY">XLY &mdash; Consumer Disc.</option>
+        <option value="XLE" selected>XLE: Energy</option>
+        <option value="SPY">SPY: S&amp;P 500</option>
+        <option value="XLK">XLK: Technology</option>
+        <option value="XLF">XLF: Financials</option>
+        <option value="XLV">XLV: Healthcare</option>
+        <option value="XLY">XLY: Consumer Disc.</option>
       </select>
     </div>
     <div class="viz-container" id="viz4-container" style="position:relative;">
@@ -424,7 +424,7 @@
     <div id="pf-stats" class="stats-row"></div>
     <div id="pf-summary-table" style="margin-top:16px;overflow-x:auto;"></div>
     <div class="takeaway">
-      <strong>Takeaway:</strong> The strategy's mechanics are simple: hold 80% equities in normal regimes, drop to 40% in high-volatility regimes, hold the rest in cash. The cost is real &mdash; for SPY, the dynamic strategy underperforms buy-and-hold by roughly 15&ndash;20 percentage points in total return over the decade, because the 2020 and 2022 recoveries reward full equity exposure. The benefit is also real: max drawdown for SPY drops from around &minus;34% (buy-and-hold, March 2020) to roughly &minus;22% (dynamic strategy), a reduction of about 12 percentage points. For XLE, the numbers are more dramatic: buy-and-hold saw a drawdown exceeding &minus;60% at the 2020 trough, while the dynamic strategy capped the loss near &minus;38%. The Sharpe ratio improvement is consistently positive across sectors because the return sacrifice is proportionally smaller than the risk reduction &mdash; but this only holds if the regime classification is timely, which the 20-day forward vol label is by construction. In a live deployment, regime detection would lag, and the actual improvement would be smaller.
+      <strong>Takeaway:</strong> The strategy's mechanics are simple: hold 80% equities in normal regimes, drop to 40% in high-volatility regimes, hold the rest in cash. The cost is real: for SPY, the dynamic strategy underperforms buy-and-hold by roughly 15&ndash;20 percentage points in total return over the decade, because the 2020 and 2022 recoveries reward full equity exposure. The benefit is also real: max drawdown for SPY drops from around &minus;34% (buy-and-hold, March 2020) to roughly &minus;22% (dynamic strategy), a reduction of about 12 percentage points. For XLE, the numbers are more dramatic: buy-and-hold saw a drawdown exceeding &minus;60% at the 2020 trough, while the dynamic strategy capped the loss near &minus;38%. The Sharpe ratio improvement is consistently positive across sectors because the return sacrifice is proportionally smaller than the risk reduction, but this only holds if the regime classification is timely, which the 20-day forward vol label is by construction. In a live deployment, regime detection would lag, and the actual improvement would be smaller.
     </div>
   </div>
 
@@ -436,17 +436,17 @@
       <span class="viz-badge badge-interactive">Interactive</span>
       <span class="viz-badge badge-linked">&#8592; Linked from Viz 1</span>
     </h3>
-    <p class="muted">This histogram compares daily return distributions under normal and high volatility. Blue bars represent normal volatility and red bars represent high volatility. Select a sector and optionally filter by year &mdash; or drag a time window in Viz 1 to filter by date range automatically.</p>
+    <p class="muted">This histogram compares daily return distributions under normal and high volatility. Blue bars represent normal volatility and red bars represent high volatility. Select a sector and optionally filter by year, or drag a time window in Viz 1 to filter by date range automatically.</p>
 
     <div class="controls-row">
       <label for="dist-sector">Sector:</label>
       <select class="ctrl-select" id="dist-sector" onchange="updateDistribution()">
-        <option value="XLE" selected>XLE &mdash; Energy</option>
-        <option value="SPY">SPY &mdash; S&amp;P 500</option>
-        <option value="XLK">XLK &mdash; Technology</option>
-        <option value="XLF">XLF &mdash; Financials</option>
-        <option value="XLV">XLV &mdash; Healthcare</option>
-        <option value="XLY">XLY &mdash; Consumer Disc.</option>
+        <option value="XLE" selected>XLE: Energy</option>
+        <option value="SPY">SPY: S&amp;P 500</option>
+        <option value="XLK">XLK: Technology</option>
+        <option value="XLF">XLF: Financials</option>
+        <option value="XLV">XLV: Healthcare</option>
+        <option value="XLY">XLY: Consumer Disc.</option>
       </select>
       <label for="dist-year">Year:</label>
       <select class="ctrl-select" id="dist-year" onchange="onYearChange()">
@@ -467,7 +467,7 @@
     <div id="dist-stats" class="stats-row"></div>
 
     <div class="takeaway">
-      <strong>Takeaway:</strong> The distributional difference between regimes is not just about variance &mdash; it's about shape. In normal-volatility periods, XLE's daily returns have a standard deviation around 1.1&ndash;1.3% and the distribution is roughly symmetric. In high-volatility periods, the standard deviation roughly doubles to 2.5&ndash;3.0%, and the left tail becomes visibly heavier than the right: large losses are more frequent than equivalently large gains. This left-skew pattern is consistent with what finance theory predicts: panic selling is faster and more correlated than accumulation. For SPY, the regime difference is smaller but the shape shift is the same &mdash; the high-vol histogram is wider and left-skewed relative to the normal-vol one. The year dropdown reveals that 2020 is the most extreme single year for every sector, while 2017 and 2019 show nearly entirely normal-regime returns with tight, symmetric distributions.
+      <strong>Takeaway:</strong> The distributional difference between regimes is not just about variance; it's about shape. In normal-volatility periods, XLE's daily returns have a standard deviation around 1.1&ndash;1.3% and the distribution is roughly symmetric. In high-volatility periods, the standard deviation roughly doubles to 2.5&ndash;3.0%, and the left tail becomes visibly heavier than the right: large losses are more frequent than equivalently large gains. This left-skew pattern is consistent with what finance theory predicts: panic selling is faster and more correlated than accumulation. For SPY, the regime difference is smaller but the shape shift is the same: the high-vol histogram is wider and left-skewed relative to the normal-vol one. Filtering by year reveals that 2020 is the most extreme single year for every sector, while 2017 and 2019 show nearly entirely normal-regime returns with tight, symmetric distributions.
     </div>
   </div>
 </section>
@@ -479,18 +479,18 @@
   </p>
 
   <div class="conclusion-card">
-    <h4>1. Regime timing is everything &mdash; and sectors respond asymmetrically</h4>
-    <p>The 2020 COVID crash and the 2022 rate-hike cycle were both high-volatility regimes by our definition, but their sector footprints were nearly opposite. In 2020, all sectors fell together and Technology recovered first; in 2022, Technology fell hardest while Energy surged. This means a regime label alone is not sufficient to predict sector behavior &mdash; the <em>cause</em> of the regime matters as much as its existence. The feature importance chart is consistent with this: 6-month momentum (7.3% importance) and Price/200-day MA (8.5%) are strong predictors precisely because they encode the directional context, not just the turbulence level.</p>
+    <h4>1. Regime timing is everything, and sectors respond asymmetrically</h4>
+    <p>The 2020 COVID crash and the 2022 rate-hike cycle were both high-volatility regimes by our definition, but their sector footprints were nearly opposite. In 2020, all sectors fell together and Technology recovered first; in 2022, Technology fell hardest while Energy surged. This means a regime label alone is not sufficient to predict sector behavior. The <em>cause</em> of the regime matters as much as its existence. The feature importance chart is consistent with this: 6-month momentum (7.3% importance) and Price/200-day MA (8.5%) are strong predictors precisely because they encode the directional context, not just the turbulence level.</p>
   </div>
 
   <div class="conclusion-card">
     <h4>2. The diversification you measure in calm markets is not the diversification you get in stressed ones</h4>
-    <p>The correlation heatmap's regime toggle is the most direct demonstration of this. XLE's average pairwise correlation with other sectors rises from roughly 0.40 in normal periods to above 0.70 in high-volatility periods &mdash; a shift large enough to meaningfully change any portfolio's realized risk. The distribution chart confirms the consequence: in high-vol regimes, every sector's return distribution widens and left-skews simultaneously, meaning the tail losses that diversification is supposed to offset are precisely the moments when sectors are most correlated. The only stable diversifier across regimes in this dataset is the XLV/XLE pair, which rises less sharply than other pairs in stress.</p>
+    <p>The correlation heatmap's regime toggle is the most direct demonstration of this. XLE's average pairwise correlation with other sectors rises from roughly 0.40 in normal periods to above 0.70 in high-volatility periods, a shift large enough to meaningfully change any portfolio's realized risk. The distribution chart confirms the consequence: in high-vol regimes, every sector's return distribution widens and left-skews simultaneously, meaning the tail losses that diversification is supposed to offset are precisely the moments when sectors are most correlated. The only stable diversifier across regimes in this dataset is the XLV/XLE pair, which rises less sharply than other pairs in stress.</p>
   </div>
 
   <div class="conclusion-card">
     <h4>3. Regime-aware allocation reduces drawdown meaningfully, but the label timing problem is real</h4>
-    <p>The dynamic strategy's max drawdown reduction &mdash; from &minus;34% to &minus;22% for SPY, from &minus;60% to &minus;38% for XLE &mdash; is economically significant. But the strategy uses a label defined on 20-day <em>forward</em> volatility, which means it has perfect foresight of when regimes begin and end. A live implementation would detect regime shifts with a lag of days to weeks, eroding both the drawdown benefit and the already-thin total-return cost. The right interpretation of Viz 4 is therefore not "this strategy works" but rather "this is the upper bound on what regime-aware allocation could achieve with perfect detection &mdash; and even then, the cost in total return is real and sector-dependent."</p>
+    <p>The dynamic strategy's max drawdown reduction (from -34% to -22% for SPY, from -60% to -38% for XLE) is economically significant. But the strategy uses a label defined on 20-day <em>forward</em> volatility, which means it has perfect foresight of when regimes begin and end. A live implementation would detect regime shifts with a lag of days to weeks, eroding both the drawdown benefit and the already-thin total-return cost. The right interpretation of Viz 4 is therefore not "this strategy works" but rather "this is the upper bound on what regime-aware allocation could achieve with perfect detection, and even then the cost in total return is real and sector-dependent."</p>
   </div>
 
   <div class="conclusion-card" style="border-left-color:var(--teal);">
@@ -520,7 +520,7 @@
 </div>
 
 <footer>
-  <p>DS4200 &mdash; Information Presentation &amp; Data Visualization &middot; Northeastern University &middot; Spring 2026</p>
+  <p>DS4200: Information Presentation &amp; Data Visualization &middot; Northeastern University &middot; Spring 2026</p>
   <p style="margin-top:6px;">
     Data: <a href="https://finance.yahoo.com" target="_blank">Yahoo Finance</a> &middot;
     <a href="https://fred.stlouisfed.org" target="_blank">FRED</a> &middot;
@@ -1092,10 +1092,10 @@ function updateDistribution() {
   const std  = a => { if(a.length<2)return 0; const m=mean(a); return Math.sqrt(a.reduce((s,v)=>s+(v-m)**2,0)/(a.length-1)); };
 
   document.getElementById('dist-stats').innerHTML = `
-    <div class="stat-item"><div class="stat-label">Normal &mdash; mean</div><div class="stat-val" style="color:var(--blue-light)">${mean(normalRet).toFixed(3)}%</div></div>
-    <div class="stat-item"><div class="stat-label">Normal &mdash; std dev</div><div class="stat-val" style="color:var(--blue-light)">${std(normalRet).toFixed(3)}%</div></div>
-    <div class="stat-item"><div class="stat-label">High &mdash; mean</div><div class="stat-val" style="color:var(--accent)">${mean(highRet).toFixed(3)}%</div></div>
-    <div class="stat-item"><div class="stat-label">High &mdash; std dev</div><div class="stat-val" style="color:var(--accent)">${std(highRet).toFixed(3)}%</div></div>
+    <div class="stat-item"><div class="stat-label">Normal: mean</div><div class="stat-val" style="color:var(--blue-light)">${mean(normalRet).toFixed(3)}%</div></div>
+    <div class="stat-item"><div class="stat-label">Normal: std dev</div><div class="stat-val" style="color:var(--blue-light)">${std(normalRet).toFixed(3)}%</div></div>
+    <div class="stat-item"><div class="stat-label">High: mean</div><div class="stat-val" style="color:var(--accent)">${mean(highRet).toFixed(3)}%</div></div>
+    <div class="stat-item"><div class="stat-label">High: std dev</div><div class="stat-val" style="color:var(--accent)">${std(highRet).toFixed(3)}%</div></div>
     <div class="stat-item"><div class="stat-label">Observations</div><div class="stat-val">${normalRet.length} / ${highRet.length}</div></div>`;
 
   const allRet = [...normalRet, ...highRet];
