@@ -71,6 +71,7 @@
   }
   section:last-of-type { border-bottom: none; }
 
+  /* h2 with extending rule line */
   h2 {
     font-family: 'Source Serif 4', Georgia, serif;
     font-size: 1.7em;
@@ -78,6 +79,15 @@
     color: var(--navy);
     margin-bottom: 20px;
     letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  h2::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
   }
   h3 {
     font-family: 'Source Sans 3', sans-serif;
@@ -93,6 +103,7 @@
   a { color: var(--blue-light); text-decoration: none; }
   a:hover { text-decoration: underline; }
 
+  /* viz-card with faded number in background */
   .viz-card {
     background: var(--card);
     border: 1px solid var(--border);
@@ -100,6 +111,23 @@
     padding: 32px;
     margin: 32px 0;
     box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    position: relative;
+    overflow: hidden;
+    transition: outline 0.3s;
+  }
+  .viz-card::before {
+    content: attr(data-viz-num);
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 7em;
+    font-weight: 700;
+    color: var(--navy);
+    opacity: 0.035;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
   }
   .viz-card h3 {
     margin-top: 0;
@@ -107,6 +135,7 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
   }
   .viz-badge {
     display: inline-block;
@@ -121,6 +150,7 @@
   .badge-d3 { background: #fef3ec; color: var(--accent-warm); }
   .badge-interactive { background: #eafaf4; color: var(--teal); }
   .badge-static { background: #f0f0f0; color: #666; }
+  .badge-linked { background: #f3eeff; color: var(--purple); }
 
   .viz-container {
     margin: 20px 0;
@@ -179,50 +209,28 @@
   .legend-swatch { width: 13px; height: 13px; border-radius: 3px; }
 
   .ref-list { list-style: none; padding: 0; }
-  .ref-list li {
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
-    font-size: 0.92em;
-  }
+  .ref-list li { padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.92em; }
   .ref-list li:last-child { border: none; }
   .ref-list .ref-title { font-style: italic; }
 
-  .data-table {
-    width: 100%; border-collapse: collapse; font-size: 0.85em; margin: 16px 0;
-  }
-  .data-table th {
-    background: var(--navy); color: white; padding: 10px 14px;
-    text-align: left; font-weight: 500;
-  }
+  .data-table { width: 100%; border-collapse: collapse; font-size: 0.85em; margin: 16px 0; }
+  .data-table th { background: var(--navy); color: white; padding: 10px 14px; text-align: left; font-weight: 500; }
   .data-table td { padding: 8px 14px; border-bottom: 1px solid #eee; }
   .data-table tr:nth-child(even) { background: #fafaf8; }
 
   .term-box {
-    background: #f9f8f5;
-    border: 1px solid var(--border);
-    border-left: 5px solid var(--blue-light);
-    border-radius: 10px;
-    padding: 18px 20px;
-    margin-top: 18px;
+    background: #f9f8f5; border: 1px solid var(--border);
+    border-left: 5px solid var(--blue-light); border-radius: 10px;
+    padding: 18px 20px; margin-top: 18px;
   }
-  .term-box h4 {
-    margin: 0 0 10px 0;
-    color: var(--navy);
-    font-size: 1em;
-  }
-  .term-box p {
-    margin: 6px 0;
-    font-size: 0.95em;
-  }
+  .term-box h4 { margin: 0 0 10px 0; color: var(--navy); font-size: 1em; }
+  .term-box p { margin: 6px 0; font-size: 0.95em; }
 
   .conclusion-card {
     background: white; border: 1px solid var(--border); border-radius: 10px;
-    padding: 24px; margin: 16px 0;
-    border-left: 5px solid var(--blue);
+    padding: 24px; margin: 16px 0; border-left: 5px solid var(--blue);
   }
-  .conclusion-card h4 {
-    font-size: 1em; font-weight: 600; color: var(--navy); margin-bottom: 8px;
-  }
+  .conclusion-card h4 { font-size: 1em; font-weight: 600; color: var(--navy); margin-bottom: 8px; }
 
   footer {
     background: var(--navy); color: rgba(255,255,255,0.7);
@@ -234,12 +242,29 @@
   .cell:hover { stroke: var(--navy) !important; stroke-width: 2.5px !important; }
   .bar-rect { transition: height 0.4s, y 0.4s; }
   .bar-rect:hover { opacity: 0.85 !important; }
+
+  /* Cross-link indicator banner */
+  .link-banner {
+    display: flex; align-items: center; gap: 10px;
+    background: #f3eeff; border: 1px solid #d9c8f5; border-radius: 8px;
+    padding: 10px 16px; margin-bottom: 14px; font-size: 0.84em; color: var(--purple);
+  }
+  .link-banner strong { font-weight: 600; }
+
+  /* Viz5 active date-range filter badge */
+  #dist-range-badge {
+    display: none;
+    background: var(--purple); color: white; border-radius: 6px;
+    padding: 4px 12px; font-size: 0.8em; font-weight: 600; margin-left: 4px;
+    cursor: pointer;
+  }
+  #dist-range-badge:hover { background: #5b3a7c; }
 </style>
 </head>
 <body>
 
 <div class="hero">
-  <div class="course-info">DS4200 — Information Presentation &amp; Data Visualization</div>
+  <div class="course-info">DS4200 &mdash; Information Presentation &amp; Data Visualization</div>
   <h1>Visualizing S&amp;P 500 Volatility Regimes</h1>
   <p class="tagline">How Federal Reserve policy and market sentiment shape risk across six market sectors</p>
   <p style="opacity:0.5; font-size:0.82em; margin-top:12px;">Team Members: Jeremy Sutikno &middot; Qianru Guo &middot; Suprabhat Khanna</p>
@@ -258,7 +283,7 @@
   </p>
   <p>
     This project explores the visual structure of volatility regimes across six major sector ETFs. Using over
-    15,000 observations spanning a decade of market data (2015–2025), we investigate three core questions:
+    15,000 observations spanning a decade of market data (2015&ndash;2025), we investigate three core questions:
     <strong>When do volatility regimes form?</strong> <strong>What economic forces drive them?</strong> And
     <strong>how do different market sectors respond?</strong> Our five visualizations follow that same narrative
     order: first we identify when regimes appear over time, then we show which macroeconomic and technical factors
@@ -275,9 +300,7 @@
     The final cleaned dataset contains <strong>15,822 observations</strong> across <strong>6 ETFs</strong>,
     each with <strong>28 engineered features</strong>, spanning from October 2015 through November 2025.
   </p>
-  <p>
-    Features are organized into five thematic groups:
-  </p>
+  <p>Features are organized into five thematic groups:</p>
   <ul style="margin: 0 0 14px 1.4em; line-height: 2;">
     <li><strong>Market prices and returns:</strong> daily close price, daily return, 5-day, 20-day, and 63-day price changes (per ETF)</li>
     <li><strong>Volatility measures:</strong> 5-, 10-, 20-, and 50-day realized volatility (annualized), short/long volatility ratio, and short/medium term structure ratio</li>
@@ -311,56 +334,49 @@
     <p><strong>Volatility regime:</strong> a period when market returns are relatively calm or unusually turbulent.</p>
     <p><strong>Correlation:</strong> how similarly two sectors move. Higher correlation means they move more alike.</p>
     <p><strong>Drawdown:</strong> the percentage drop from a previous peak in portfolio value.</p>
-    <p><strong>VIX:</strong> a commonly used market “fear gauge.”</p>
+    <p><strong>VIX:</strong> a commonly used market "fear gauge."</p>
   </div>
-</section>
-
-<section id="references">
-  <h2>References</h2>
-  <ul class="ref-list">
-    <li>
-      <strong>Parkinson, M.</strong> (1980).
-      <span class="ref-title">The Extreme Value Method for Estimating the Variance of the Rate of Return.</span>
-      Journal of Business, 53(1), 61–65.
-      <a href="https://doi.org/10.1086/296071" target="_blank">DOI link →</a>
-    </li>
-    <li>
-      <strong>Goldstein, I., Koijen, R. S. J., &amp; Mueller, H. M.</strong> (2021).
-      <span class="ref-title">COVID-19 and Its Impact on Financial Markets and the Real Economy.</span>
-      Review of Financial Studies, 34(11), 5135–5148.
-      <a href="https://doi.org/10.1093/rfs/hhab085" target="_blank">DOI link →</a>
-    </li>
-  </ul>
 </section>
 
 <section id="viz1">
   <h2>Visualizations</h2>
 
-  <div class="viz-card">
+  <!-- VIZ 1 -->
+  <div class="viz-card" data-viz-num="01">
     <h3>
       1. Sector Volatility Timeline
       <span class="viz-badge badge-altair">Altair</span>
       <span class="viz-badge badge-interactive">Interactive</span>
+      <span class="viz-badge badge-linked">&#8594; Links to Viz 5</span>
     </h3>
-    <p class="muted">This chart shows how sector ETF prices and rolling volatility change over time. <strong style="color:var(--blue);">&#9432; Interaction:</strong> Drag the shaded region on the <em>overview chart at the bottom</em> to zoom into any date range. Hover over the lines for exact values. Click and drag again to reset.</p>
+    <p class="muted"><strong style="color:var(--blue);">&#9432; Interaction:</strong> Drag the shaded region on the <em>overview chart at the bottom</em> to zoom into any date range. Hover over the lines for exact values. Click and drag again to reset.</p>
+    <div class="link-banner">
+      <strong>Cross-viz link:</strong> Drag a time window in the overview below &mdash; the Return Distribution chart (Viz 5) will automatically update to show only returns from that period.
+    </div>
     <div class="viz-container" id="viz1-container" style="min-height:520px;"></div>
     <div class="takeaway">
-      <strong>Takeaway:</strong> This plot shows how normalized sector ETF prices and rolling volatility evolve over time across different market regimes. Different sectors respond to volatility regimes with strikingly different magnitudes: Energy (XLE) shows the widest swings, while Healthcare (XLV) is more defensive. During the 2020 COVID crash, all sectors declined together, but recovery speed varied dramatically—Technology recovered fastest while Energy lagged for over a year. The volatility subplot also shows that sector volatilities converge during crises but diverge during calmer periods.
+      <strong>Takeaway:</strong> Different sectors respond to volatility regimes with strikingly different magnitudes: Energy (XLE) shows the widest swings, while Healthcare (XLV) is more defensive. During the 2020 COVID crash, all sectors declined together, but recovery speed varied dramatically &mdash; Technology recovered fastest while Energy lagged for over a year. The volatility subplot also shows that sector volatilities converge during crises but diverge during calmer periods.
     </div>
   </div>
 
-  <div class="viz-card">
+  <!-- VIZ 2 -->
+  <div class="viz-card" data-viz-num="02">
     <h3>
       2. Volatility Regime Drivers
       <span class="viz-badge badge-altair">Altair</span>
       <span class="viz-badge badge-static">Static</span>
     </h3>
-    <p class="muted">This chart ranks the top 15 features that help classify high- versus normal-volatility regimes.</p>
+    <p class="muted">This chart ranks the top 15 features that help classify high- versus normal-volatility regimes. <strong style="color:var(--blue);">&#9432; Interaction:</strong> Hover any bar to see a plain-English description of what that feature measures.</p>
     <div class="viz-container" id="viz3-container" style="min-height:420px;"></div>
-    <p class="muted"><strong>&#9432; Interaction:</strong> Hover any bar to see a plain-English description of what that feature measures and its exact importance score.</p>
     <div class="takeaway">
-      <strong>Takeaway:</strong> This bar chart shows which macroeconomic and technical features are most useful for distinguishing high- from normal-volatility regimes. Macroeconomic factors dominate: the Federal Funds Rate and VIX Index are the strongest regime predictors, followed by longer-horizon momentum. This suggests that volatility regimes are driven more by policy conditions and market sentiment than by short-term chart patterns alone.
+      <strong>Takeaway:</strong> Macroeconomic factors dominate: the Federal Funds Rate and VIX Index are the strongest regime predictors, followed by longer-horizon momentum. This suggests that volatility regimes are driven more by policy conditions and market sentiment than by short-term chart patterns alone.
     </div>
+  </div>
+
+  <!-- VIZ 3 -->
+  <div class="viz-card" data-viz-num="03">
+    <h3>
+      3. Sector Correlation Heatmap
       <span class="viz-badge badge-d3">D3</span>
       <span class="viz-badge badge-interactive">Interactive</span>
     </h3>
@@ -378,27 +394,27 @@
     </div>
 
     <div class="takeaway">
-      <strong>Takeaway:</strong> This heatmap shows how closely sector returns move together under different volatility regimes. During high-volatility periods, correlations increase substantially—sectors that usually move somewhat differently become much more synchronized during market stress. This means diversification weakens when investors may need it most. Energy (XLE) remains the most distinct sector across regimes, offering the strongest diversification value.
+      <strong>Takeaway:</strong> During high-volatility periods, correlations increase substantially &mdash; sectors that usually move somewhat differently become much more synchronized during market stress. This means diversification weakens when investors may need it most. Energy (XLE) remains the most distinct sector across regimes, offering the strongest diversification value.
     </div>
   </div>
 
-  <div class="viz-card">
+  <!-- VIZ 4 -->
+  <div class="viz-card" data-viz-num="04">
     <h3>
       4. Portfolio Strategy Comparison
-      <span class="viz-badge badge-altair">Altair</span>
+      <span class="viz-badge badge-d3">D3</span>
       <span class="viz-badge badge-interactive">Interactive</span>
     </h3>
-    <p class="muted">This chart compares a regime-aware strategy with buy-and-hold over time. Use the dropdown to isolate individual sector ETFs.</p>
+    <p class="muted">This chart compares a regime-aware dynamic allocation strategy (80% stocks in normal volatility, 40% in high volatility) with buy-and-hold over time. Use the dropdown to isolate individual sector ETFs. The summary table below compares all sectors at a glance.</p>
     <div class="controls-row">
       <label for="pf-select">Select ETF:</label>
       <select class="ctrl-select" id="pf-select" onchange="updatePortfolio()">
-        <option value="XLE" selected>XLE — Energy</option>
-        <option value="SPY">SPY — S&amp;P 500</option>
-        <option value="XLK">XLK — Technology</option>
-        <option value="XLF">XLF — Financials</option>
-        <option value="XLV">XLV — Healthcare</option>
-        <option value="XLY">XLY — Consumer Disc.</option>
-        <option value="all">All ETFs</option>
+        <option value="XLE" selected>XLE &mdash; Energy</option>
+        <option value="SPY">SPY &mdash; S&amp;P 500</option>
+        <option value="XLK">XLK &mdash; Technology</option>
+        <option value="XLF">XLF &mdash; Financials</option>
+        <option value="XLV">XLV &mdash; Healthcare</option>
+        <option value="XLY">XLY &mdash; Consumer Disc.</option>
       </select>
     </div>
     <div class="viz-container" id="viz4-container" style="position:relative;">
@@ -408,32 +424,35 @@
     <div id="pf-stats" class="stats-row"></div>
     <div id="pf-summary-table" style="margin-top:16px;overflow-x:auto;"></div>
     <div class="takeaway">
-      <strong>Takeaway:</strong> This chart shows cumulative performance for a simple regime-aware strategy versus buy-and-hold. The dynamic allocation strategy consistently reduces maximum drawdown across sectors, though it gives up a small amount of total return. The tradeoff is strongest in more volatile sectors such as Energy and Technology, where downside protection matters most.
+      <strong>Takeaway:</strong> The dynamic allocation strategy consistently reduces maximum drawdown across sectors, though it gives up a small amount of total return. The tradeoff is strongest in more volatile sectors such as Energy and Technology, where downside protection matters most.
     </div>
   </div>
 
-  <div class="viz-card">
+  <!-- VIZ 5 -->
+  <div class="viz-card" data-viz-num="05">
     <h3>
       5. Return Distribution by Regime
       <span class="viz-badge badge-d3">D3</span>
       <span class="viz-badge badge-interactive">Interactive</span>
+      <span class="viz-badge badge-linked">&#8592; Linked from Viz 1</span>
     </h3>
-    <p class="muted">This histogram compares daily return distributions under normal and high volatility. Blue bars represent normal volatility and red bars represent high volatility. Select a sector and optionally filter by year.</p>
+    <p class="muted">This histogram compares daily return distributions under normal and high volatility. Blue bars represent normal volatility and red bars represent high volatility. Select a sector and optionally filter by year &mdash; or drag a time window in Viz 1 to filter by date range automatically.</p>
 
     <div class="controls-row">
       <label for="dist-sector">Sector:</label>
       <select class="ctrl-select" id="dist-sector" onchange="updateDistribution()">
-        <option value="XLE" selected>XLE — Energy</option>
-        <option value="SPY">SPY — S&amp;P 500</option>
-        <option value="XLK">XLK — Technology</option>
-        <option value="XLF">XLF — Financials</option>
-        <option value="XLV">XLV — Healthcare</option>
-        <option value="XLY">XLY — Consumer Disc.</option>
+        <option value="XLE" selected>XLE &mdash; Energy</option>
+        <option value="SPY">SPY &mdash; S&amp;P 500</option>
+        <option value="XLK">XLK &mdash; Technology</option>
+        <option value="XLF">XLF &mdash; Financials</option>
+        <option value="XLV">XLV &mdash; Healthcare</option>
+        <option value="XLY">XLY &mdash; Consumer Disc.</option>
       </select>
       <label for="dist-year">Year:</label>
-      <select class="ctrl-select" id="dist-year" onchange="updateDistribution()">
+      <select class="ctrl-select" id="dist-year" onchange="onYearChange()">
         <option value="all">All years</option>
       </select>
+      <span id="dist-range-badge" onclick="clearDateRange()">&times; Clear date filter</span>
     </div>
 
     <div class="legend-row">
@@ -448,7 +467,7 @@
     <div id="dist-stats" class="stats-row"></div>
 
     <div class="takeaway">
-      <strong>Takeaway:</strong> This histogram shows the distribution of daily returns under normal and high-volatility regimes. High-volatility returns are not only more spread out but also have a heavier left tail, meaning larger losses occur more often. The effect is most dramatic for Energy (XLE), where high-regime daily returns extend much farther than normal-regime returns. This visual pattern helps explain why regime-aware risk management can matter so much in cyclical sectors.
+      <strong>Takeaway:</strong> High-volatility returns are not only more spread out but also have a heavier left tail, meaning larger losses occur more often. The effect is most dramatic for Energy (XLE). Try dragging the Viz 1 overview to a specific episode such as March 2020 or 2022 to see how the distribution shifts during that period.
     </div>
   </div>
 </section>
@@ -456,42 +475,52 @@
 <section id="summary">
   <h2>Summary &amp; Conclusions</h2>
   <p>
-    Through five connected visualizations, this project follows a simple story: first we identify when volatility regimes appear, then we explain what drives them, and finally we show how those shifts affect sector behavior, diversification, and portfolio risk. Together, these visualizations reveal the hidden structure of market turbulence and why it matters for investors.
+    Through five connected visualizations, this project follows a simple story: first we identify when volatility regimes appear, then we explain what drives them, and finally we show how those shifts affect sector behavior, diversification, and portfolio risk.
   </p>
 
   <div class="conclusion-card">
     <h4>1. Volatility regimes can be clearly identified over time</h4>
-    <p>
-      The timeline visualization shows that periods such as the 2020 COVID crash and the 2022 rate-hike cycle were not isolated daily shocks but extended high-volatility regimes. These regimes affected all sectors, but not equally.
-    </p>
+    <p>The timeline visualization shows that periods such as the 2020 COVID crash and the 2022 rate-hike cycle were not isolated daily shocks but extended high-volatility regimes. These regimes affected all sectors, but not equally.</p>
   </div>
 
   <div class="conclusion-card">
     <h4>2. Volatility regimes are driven more by macroeconomic conditions than short-term technical noise</h4>
-    <p>
-      Our feature-importance chart shows that the Federal Funds Rate and VIX are among the strongest predictors of regime changes. This suggests that policy conditions and market sentiment play a larger role than short-term technical indicators alone.
-    </p>
+    <p>Our feature-importance chart shows that the Federal Funds Rate and VIX are among the strongest predictors of regime changes. This suggests that policy conditions and market sentiment play a larger role than short-term technical indicators alone.</p>
   </div>
 
   <div class="conclusion-card">
     <h4>3. Sector behavior and portfolio risk change substantially during high-volatility periods</h4>
-    <p>
-      Our cross-sector and distribution views show that diversification weakens during market stress, while regime-aware portfolio rules can reduce drawdowns at the cost of only a modest reduction in return. Energy stands out as both the most volatile sector and the clearest example of why regime shifts matter in practice.
-    </p>
+    <p>Our cross-sector and distribution views show that diversification weakens during market stress, while regime-aware portfolio rules can reduce drawdowns at the cost of only a modest reduction in return. Energy stands out as both the most volatile sector and the clearest example of why regime shifts matter in practice.</p>
   </div>
 
   <div class="conclusion-card" style="border-left-color:var(--teal);">
     <h4>Future Directions</h4>
-    <p>
-      Several extensions would strengthen this analysis. First, the regime classifier could be improved by using a hidden Markov model or GARCH-family model instead of a simple median split, which would better capture the persistence of volatility states. Second, the portfolio strategy could be made more realistic by incorporating transaction costs and slippage, which would reduce the apparent advantage of dynamic allocation in high-turnover sectors. Third, expanding to international sector ETFs (European and Asian equivalents) would allow testing whether the correlation convergence effect observed here is a universal phenomenon or specific to U.S. markets. Finally, incorporating earnings announcement dates as a feature could help disentangle idiosyncratic volatility spikes from genuine macro-driven regime shifts.
-    </p>
+    <p>Several extensions would strengthen this analysis. First, the regime classifier could be improved by using a hidden Markov model or GARCH-family model instead of a simple median split, which would better capture the persistence of volatility states. Second, the portfolio strategy could be made more realistic by incorporating transaction costs and slippage, which would reduce the apparent advantage of dynamic allocation in high-turnover sectors. Third, expanding to international sector ETFs (European and Asian equivalents) would allow testing whether the correlation convergence effect observed here is a universal phenomenon or specific to U.S. markets. Finally, incorporating earnings announcement dates as a feature could help disentangle idiosyncratic volatility spikes from genuine macro-driven regime shifts.</p>
   </div>
+</section>
+
+<section id="references">
+  <h2>References</h2>
+  <ul class="ref-list">
+    <li>
+      <strong>Parkinson, M.</strong> (1980).
+      <span class="ref-title">The Extreme Value Method for Estimating the Variance of the Rate of Return.</span>
+      Journal of Business, 53(1), 61&ndash;65.
+      <a href="https://doi.org/10.1086/296071" target="_blank">DOI link &rarr;</a>
+    </li>
+    <li>
+      <strong>Goldstein, I., Koijen, R. S. J., &amp; Mueller, H. M.</strong> (2021).
+      <span class="ref-title">COVID-19 and Its Impact on Financial Markets and the Real Economy.</span>
+      Review of Financial Studies, 34(11), 5135&ndash;5148.
+      <a href="https://doi.org/10.1093/rfs/hhab085" target="_blank">DOI link &rarr;</a>
+    </li>
+  </ul>
 </section>
 
 </div>
 
 <footer>
-  <p>DS4200 — Information Presentation &amp; Data Visualization &middot; Northeastern University &middot; Spring 2026</p>
+  <p>DS4200 &mdash; Information Presentation &amp; Data Visualization &middot; Northeastern University &middot; Spring 2026</p>
   <p style="margin-top:6px;">
     Data: <a href="https://finance.yahoo.com" target="_blank">Yahoo Finance</a> &middot;
     <a href="https://fred.stlouisfed.org" target="_blank">FRED</a> &middot;
@@ -524,6 +553,9 @@ const NAMES = {
 const TICKERS = ['SPY','XLK','XLF','XLE','XLV','XLY'];
 let RAW_DATA = [];
 
+// Cross-link state: null = no active filter, else { start, end } Date objects from Viz 1 brush
+let _linkedDateRange = null;
+
 d3.csv('data/web_dataset.csv').then(raw => {
   raw.forEach(d => {
     d.close = +d.close;
@@ -550,6 +582,7 @@ d3.csv('data/web_dataset.csv').then(raw => {
   });
 });
 
+// ── VIZ 1: Sector Volatility Timeline ────────────────────────────────────
 function buildViz1() {
   const data = [];
   const firstPrices = {};
@@ -557,7 +590,6 @@ function buildViz1() {
     const rows = RAW_DATA.filter(d => d.ticker === t);
     if (rows.length) firstPrices[t] = rows[0].close;
   });
-
   RAW_DATA.forEach(d => {
     if (firstPrices[d.ticker]) {
       data.push({
@@ -578,27 +610,23 @@ function buildViz1() {
       {
         width: 760, height: 260,
         title: { text: 'Sector ETF Normalized Price (Base = 100)', anchor: 'start' },
-        layer: [
-          {
-            mark: { type: 'line', strokeWidth: 1.5 },
-            params: [{ name: 'hover', select: { type: 'point', on: 'pointerover', nearest: true } }],
-            encoding: {
-              x: { field: 'date', type: 'temporal', title: '', scale: { domain: { param: 'brush' } } },
-              y: { field: 'price_norm', type: 'quantitative', title: 'Normalized price', scale: { zero: false } },
-              color: {
-                field: 'ticker', type: 'nominal', title: 'ETF',
-                scale: { domain: TICKERS, range: TICKERS.map(t => COLORS[t]) }
-              },
-              tooltip: [
-                { field: 'date', type: 'temporal', title: 'Date', format: '%b %d, %Y' },
-                { field: 'ticker', type: 'nominal', title: 'ETF' },
-                { field: 'close', type: 'quantitative', title: 'Price ($)', format: ',.2f' },
-                { field: 'volatility_20d', type: 'quantitative', title: 'Volatility (20d)', format: '.2%' },
-                { field: 'regime_label', type: 'nominal', title: 'Regime' }
-              ]
-            }
+        layer: [{
+          mark: { type: 'line', strokeWidth: 1.5 },
+          params: [{ name: 'hover', select: { type: 'point', on: 'pointerover', nearest: true } }],
+          encoding: {
+            x: { field: 'date', type: 'temporal', title: '', scale: { domain: { param: 'brush' } } },
+            y: { field: 'price_norm', type: 'quantitative', title: 'Normalized price', scale: { zero: false } },
+            color: { field: 'ticker', type: 'nominal', title: 'ETF',
+              scale: { domain: TICKERS, range: TICKERS.map(t => COLORS[t]) } },
+            tooltip: [
+              { field: 'date', type: 'temporal', title: 'Date', format: '%b %d, %Y' },
+              { field: 'ticker', type: 'nominal', title: 'ETF' },
+              { field: 'close', type: 'quantitative', title: 'Price ($)', format: ',.2f' },
+              { field: 'volatility_20d', type: 'quantitative', title: 'Volatility (20d)', format: '.2%' },
+              { field: 'regime_label', type: 'nominal', title: 'Regime' }
+            ]
           }
-        ]
+        }]
       },
       {
         width: 760, height: 130,
@@ -613,7 +641,7 @@ function buildViz1() {
       },
       {
         width: 760, height: 50,
-        title: { text: 'Drag below to select a date range', anchor: 'start', color: '#888', fontSize: 11 },
+        title: { text: 'Drag below to select a date range \u2014 updates Viz 5 automatically', anchor: 'start', color: '#888', fontSize: 11 },
         params: [{ name: 'brush', select: { type: 'interval', encodings: ['x'] } }],
         mark: { type: 'line', strokeWidth: 0.7, opacity: 0.5 },
         encoding: {
@@ -632,9 +660,36 @@ function buildViz1() {
     }
   };
 
-  vegaEmbed('#viz1-container', spec, { actions: false, renderer: 'svg' });
+  vegaEmbed('#viz1-container', spec, { actions: false, renderer: 'svg' }).then(result => {
+    // Listen for brush signal and push date range to Viz 5
+    result.view.addSignalListener('brush', (name, value) => {
+      if (value && value.date && value.date.length === 2) {
+        _linkedDateRange = { start: new Date(value.date[0]), end: new Date(value.date[1]) };
+        // Clear year dropdown since date range takes precedence
+        document.getElementById('dist-year').value = 'all';
+        // Update badge label
+        const badge = document.getElementById('dist-range-badge');
+        const fmt = d3.timeFormat('%b %Y');
+        badge.textContent = '\u00D7 ' + fmt(_linkedDateRange.start) + ' \u2013 ' + fmt(_linkedDateRange.end);
+        badge.style.display = 'inline-block';
+        updateDistribution();
+        // Brief purple outline flash on Viz 5 card to signal the link fired
+        const v5 = document.querySelector('[data-viz-num="05"]');
+        if (v5) {
+          v5.style.outline = '2px solid var(--purple)';
+          setTimeout(() => { v5.style.outline = ''; }, 1200);
+        }
+      } else {
+        // Brush was cleared
+        _linkedDateRange = null;
+        document.getElementById('dist-range-badge').style.display = 'none';
+        updateDistribution();
+      }
+    });
+  });
 }
 
+// ── VIZ 2: Correlation Heatmap (D3) ──────────────────────────────────────
 let hmData = { all: null, normal: null, high: null };
 
 function buildViz2() {
@@ -677,16 +732,23 @@ function buildViz2() {
   hmData.normal = buildMatrix(d=>d.regime===0);
   hmData.high = buildMatrix(d=>d.regime===1);
 
+  // Column headers colored by ETF palette
   g.selectAll('.xl').data(TICKERS).join('text')
     .attr('x', d=>x(d)+x.bandwidth()/2).attr('y',-8).attr('text-anchor','middle')
-    .style('font-size','12px').style('font-weight','600').style('fill','var(--text)').text(d=>d);
+    .style('font-size','12px').style('font-weight','700')
+    .style('fill', d => COLORS[d])
+    .text(d=>d);
   g.selectAll('.xn').data(TICKERS).join('text')
     .attr('x', d=>x(d)+x.bandwidth()/2).attr('y',-24).attr('text-anchor','middle')
     .style('font-size','9.5px').style('fill','var(--muted)').text(d=>NAMES[d]);
+
+  // Row headers colored by ETF palette
   g.selectAll('.yl').data(TICKERS).join('text')
     .attr('x',-10).attr('y',d=>y(d)+y.bandwidth()/2).attr('text-anchor','end')
     .attr('dominant-baseline','central')
-    .style('font-size','12px').style('font-weight','600').style('fill','var(--text)').text(d=>d);
+    .style('font-size','12px').style('font-weight','700')
+    .style('fill', d => COLORS[d])
+    .text(d=>d);
 
   const lw=18, lh=size;
   const defs = svg.append('defs');
@@ -699,18 +761,23 @@ function buildViz2() {
   leg.append('text').attr('x',lw/2).attr('y',-12).attr('text-anchor','middle').style('font-size','10px').style('font-weight','600').text('Correlation');
 
   const tooltip = d3.select('#hm-tooltip');
-
-  window._hmG = g;
-  window._hmX = x;
-  window._hmY = y;
-  window._hmGetColor = getColor;
-  window._hmTooltip = tooltip;
+  window._hmG = g; window._hmX = x; window._hmY = y;
+  window._hmGetColor = getColor; window._hmTooltip = tooltip;
   updateHeatmap('all');
 }
 
+let _hmCurrentMode = 'all';
+
 function updateHeatmap(mode) {
-  document.querySelectorAll('#viz2-container .ctrl-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('hm-'+mode).classList.add('active');
+  // Clicking the already-active button (other than 'all') toggles back to 'all'
+  if (mode !== 'all' && mode === _hmCurrentMode) {
+    mode = 'all';
+  }
+  _hmCurrentMode = mode;
+  ['all','normal','high'].forEach(m => {
+    const b = document.getElementById('hm-'+m);
+    if (b) b.classList.toggle('active', m === mode);
+  });
   const data = hmData[mode]; if (!data) return;
   const g=window._hmG, x=window._hmX, y=window._hmY, getColor=window._hmGetColor, tooltip=window._hmTooltip;
 
@@ -719,7 +786,8 @@ function updateHeatmap(mode) {
     .attr('x',d=>x(d.col)).attr('y',d=>y(d.row)).attr('width',x.bandwidth()).attr('height',y.bandwidth())
     .attr('rx',4).style('stroke','#fff').style('stroke-width',2)
     .on('mouseover',function(e,d){
-      tooltip.style('opacity',1).html(`<strong>${NAMES[d.row]} × ${NAMES[d.col]}</strong><br>Correlation: ${d.value.toFixed(3)}<br><span style="font-size:11px;opacity:0.9;">Red = stronger positive, blue = weaker/negative</span>`)
+      tooltip.style('opacity',1)
+        .html(`<strong>${NAMES[d.row]} &times; ${NAMES[d.col]}</strong><br>Correlation: ${d.value.toFixed(3)}<br><span style="font-size:11px;opacity:0.9;">Red = stronger positive, blue = weaker/negative</span>`)
         .style('left',(e.offsetX+14)+'px').style('top',(e.offsetY-10)+'px');
     })
     .on('mousemove',function(e){tooltip.style('left',(e.offsetX+14)+'px').style('top',(e.offsetY-10)+'px');})
@@ -735,6 +803,7 @@ function updateHeatmap(mode) {
     .text(d=>d.value.toFixed(2)).style('fill',d=>Math.abs(d.value)>0.55?'#fff':'#333');
 }
 
+// ── VIZ 3: Feature Importance (Altair/Vega-Lite) ─────────────────────────
 function buildViz3() {
   d3.csv('data/feature_importance.csv').then(imp => {
     imp.forEach(d => d.importance = +d.importance);
@@ -743,34 +812,37 @@ function buildViz3() {
       'Volatility (20-day)': '20-day realized volatility: how much prices have swung over the past month (annualized)',
       'ATR Ratio': 'Average True Range ratio: measures typical daily price range relative to price level',
       'Volatility (10-day)': '10-day realized volatility: short-term measure of recent price swings',
-      'Price / 200-day MA': 'Current price divided by 200-day moving average — a long-term trend signal',
+      'Price / 200-day MA': 'Current price divided by 200-day moving average \u2014 a long-term trend signal',
       'Volatility (50-day)': '50-day realized volatility: medium-term measure of price swings over ~2 months',
       'Momentum (6-month)': '6-month price momentum: how much the price has risen or fallen over 126 trading days',
-      'Bollinger Band Width': 'Width of the Bollinger Bands relative to price — wide bands signal high uncertainty',
-      'High/Low Ratio': 'Daily high divided by daily low — a simple proxy for intraday volatility',
+      'Bollinger Band Width': 'Width of the Bollinger Bands relative to price \u2014 wide bands signal high uncertainty',
+      'High/Low Ratio': 'Daily high divided by daily low \u2014 a simple proxy for intraday volatility',
       'Momentum (3-month)': '3-month price momentum: trend signal over approximately 63 trading days',
       'Volatility (5-day)': '5-day realized volatility: captures very recent, week-level price swings',
       'Distance from 50-day MA': 'How far the current price sits above or below the 50-day moving average',
-      'Volume Ratio (10d/50d)': 'Ratio of recent to longer-term average volume — elevated ratio signals unusual activity',
+      'Volume Ratio (10d/50d)': 'Ratio of recent to longer-term average volume \u2014 elevated ratio signals unusual activity',
       'Distance from 10-day MA': 'How far the current price sits above or below the 10-day moving average',
-      'Volatility Ratio (10d/50d)': 'Short-term vs. long-term volatility ratio — rising ratio signals increasing turbulence',
+      'Volatility Ratio (10d/50d)': 'Short-term vs. long-term volatility ratio \u2014 rising ratio signals increasing turbulence',
       'Momentum (1-month)': '1-month price momentum: very short-term trend signal over ~21 trading days',
-      'Fed Funds Rate': 'Federal Reserve benchmark interest rate — key driver of broader financial conditions',
-      'VIX Index': "CBOE Volatility Index: the market's real-time \"fear gauge\" based on S&P 500 options pricing",
-      'Unemployment Rate': 'U.S. unemployment rate from FRED — a lagging macro indicator of economic stress'
+      'Fed Funds Rate': 'Federal Reserve benchmark interest rate \u2014 key driver of broader financial conditions',
+      'VIX Index': 'CBOE Volatility Index: the market\'s real-time "fear gauge" based on S&P 500 options pricing',
+      'Unemployment Rate': 'U.S. unemployment rate from FRED \u2014 a lagging macro indicator of economic stress'
     };
 
-    imp.forEach(d => d.description = featureDescriptions[d.feature_name] || d.feature_name);
+    imp.forEach(d => { d.description = featureDescriptions[d.feature_name] || d.feature_name; });
 
     const catColors = {
       Macroeconomic:'#c0392b', Volatility:'#e67e22', Momentum:'#2980b9',
       Trend:'#27ae60', 'Range / Bands':'#8e44ad', Volume:'#16a085'
     };
 
+    // Sort by importance descending so macro features naturally appear at top if they rank highest
+    imp.sort((a,b) => b.importance - a.importance);
+
     const spec = {
       $schema:'https://vega.github.io/schema/vega-lite/v5.json',
       data: { values: imp },
-      width: 520, height: 380,
+      width: 520, height: 400,
       layer: [
         {
           mark: { type:'bar', cornerRadiusEnd:4, height:19 },
@@ -780,10 +852,10 @@ function buildViz3() {
             color: { field:'category', type:'nominal', title:'Category',
               scale:{ domain:Object.keys(catColors), range:Object.values(catColors) } },
             tooltip:[
-              {field:'feature_name',type:'nominal',title:'Feature'},
-              {field:'description',type:'nominal',title:'What it measures'},
-              {field:'category',type:'nominal',title:'Category'},
-              {field:'importance',type:'quantitative',title:'Importance',format:'.4f'}
+              {field:'feature_name', type:'nominal', title:'Feature'},
+              {field:'description', type:'nominal', title:'What it measures'},
+              {field:'category', type:'nominal', title:'Category'},
+              {field:'importance', type:'quantitative', title:'Importance', format:'.4f'}
             ]
           }
         },
@@ -800,7 +872,7 @@ function buildViz3() {
         text:'Visualization 2: What Drives Volatility Regimes?',
         subtitle:[
           'Top 15 features ranked by Random Forest importance for classifying high vs. normal volatility',
-          'This chart shows which features matter most for identifying regime changes'
+          'Hover any bar for a plain-English description. Macroeconomic features are shown in red.'
         ],
         fontSize:16
       },
@@ -818,6 +890,7 @@ function buildViz3() {
   });
 }
 
+// ── VIZ 4: Portfolio Strategy Comparison (D3) ────────────────────────────
 let pfData = {};
 
 function buildViz4() {
@@ -847,18 +920,12 @@ function updatePortfolio() {
   const g = window._pfG, W=window._pfW, H=window._pfH;
   g.selectAll('*').remove();
 
-  const tickers = sel==='all' ? TICKERS : [sel];
-  let allPoints = [];
-  tickers.forEach(t => { if(pfData[t]) allPoints = allPoints.concat(pfData[t]); });
-  if (!allPoints.length) return;
+  const data = pfData[sel];
+  if (!data || !data.length) return;
 
-  const x = d3.scaleTime()
-    .domain(d3.extent(allPoints, d=>d.date))
-    .range([0,W]);
-  const allVals = allPoints.flatMap(d=>[d.strategy,d.buyhold]);
-  const y = d3.scaleLinear()
-    .domain([d3.min(allVals)*0.95, d3.max(allVals)*1.05])
-    .range([H,0]);
+  const x = d3.scaleTime().domain(d3.extent(data, d=>d.date)).range([0,W]);
+  const allVals = data.flatMap(d=>[d.strategy,d.buyhold]);
+  const y = d3.scaleLinear().domain([d3.min(allVals)*0.95, d3.max(allVals)*1.05]).range([H,0]);
 
   g.append('g').attr('transform',`translate(0,${H})`).call(d3.axisBottom(x).ticks(8)).selectAll('text').style('font-size','11px');
   g.append('g').call(d3.axisLeft(y).ticks(6).tickFormat(d3.format('.2f'))).selectAll('text').style('font-size','11px');
@@ -868,109 +935,76 @@ function updatePortfolio() {
     .attr('stroke','#999').attr('stroke-dasharray','4,4').attr('stroke-width',0.8);
 
   const lineGen = field => d3.line().x(d=>x(d.date)).y(d=>y(d[field])).curve(d3.curveMonotoneX);
+  const c = COLORS[sel];
 
-  tickers.forEach(t => {
-    const data = pfData[t]; if(!data||!data.length) return;
-    const opacity = tickers.length > 1 ? 0.6 : 0.9;
-    g.append('path').datum(data).attr('fill','none')
-      .attr('stroke', COLORS[t]).attr('stroke-width', tickers.length>1?1.2:2)
-      .attr('opacity', opacity).attr('d', lineGen('strategy'));
-    g.append('path').datum(data).attr('fill','none')
-      .attr('stroke', COLORS[t]).attr('stroke-width', tickers.length>1?0.8:1.5)
-      .attr('stroke-dasharray','6,4').attr('opacity', opacity*0.6).attr('d', lineGen('buyhold'));
-  });
+  g.append('path').datum(data).attr('fill','none').attr('stroke',c).attr('stroke-width',2).attr('opacity',0.9).attr('d',lineGen('strategy'));
+  g.append('path').datum(data).attr('fill','none').attr('stroke',c).attr('stroke-width',1.5).attr('stroke-dasharray','6,4').attr('opacity',0.55).attr('d',lineGen('buyhold'));
 
-  g.append('line').attr('x1',W-180).attr('x2',W-150).attr('y1',14).attr('y2',14)
-    .attr('stroke','var(--blue)').attr('stroke-width',2);
+  g.append('line').attr('x1',W-180).attr('x2',W-150).attr('y1',14).attr('y2',14).attr('stroke',c).attr('stroke-width',2);
   g.append('text').attr('x',W-145).attr('y',18).style('font-size','11px').text('Dynamic strategy');
-  g.append('line').attr('x1',W-180).attr('x2',W-150).attr('y1',32).attr('y2',32)
-    .attr('stroke','var(--blue)').attr('stroke-width',1.5).attr('stroke-dasharray','6,4');
+  g.append('line').attr('x1',W-180).attr('x2',W-150).attr('y1',32).attr('y2',32).attr('stroke',c).attr('stroke-width',1.5).attr('stroke-dasharray','6,4');
   g.append('text').attr('x',W-145).attr('y',36).style('font-size','11px').text('Buy & hold');
 
-  const statsEl = document.getElementById('pf-stats');
-  if (tickers.length === 1 && pfData[tickers[0]]) {
-    const d = pfData[tickers[0]];
-    const last = d[d.length-1];
-    const sRet = ((last.strategy-1)*100).toFixed(1);
-    const bRet = ((last.buyhold-1)*100).toFixed(1);
+  const last = data[data.length-1];
+  const sRet = ((last.strategy-1)*100).toFixed(1);
+  const bRet = ((last.buyhold-1)*100).toFixed(1);
+  let sPeak=0, sDD=0, bPeak=0, bDD=0;
+  data.forEach(v => {
+    sPeak = Math.max(sPeak, v.strategy); sDD = Math.min(sDD, (v.strategy-sPeak)/sPeak);
+    bPeak = Math.max(bPeak, v.buyhold);  bDD = Math.min(bDD, (v.buyhold-bPeak)/bPeak);
+  });
 
-    let sPeak = 0, sDD = 0;
-    d.forEach(v => {
-      sPeak = Math.max(sPeak, v.strategy);
-      sDD = Math.min(sDD, (v.strategy - sPeak) / sPeak);
-    });
-    let bPeak = 0, bDD = 0;
-    d.forEach(v => {
-      bPeak = Math.max(bPeak, v.buyhold);
-      bDD = Math.min(bDD, (v.buyhold - bPeak) / bPeak);
-    });
-
-    statsEl.innerHTML = `
-      <div class="stat-item"><div class="stat-label">Strategy return</div><div class="stat-val" style="color:var(--blue)">${sRet}%</div></div>
-      <div class="stat-item"><div class="stat-label">Buy &amp; hold return</div><div class="stat-val" style="color:#666">${bRet}%</div></div>
-      <div class="stat-item"><div class="stat-label">Strategy max drawdown</div><div class="stat-val" style="color:var(--blue)">${(sDD*100).toFixed(1)}%</div></div>
-      <div class="stat-item"><div class="stat-label">Buy &amp; hold max drawdown</div><div class="stat-val" style="color:#666">${(bDD*100).toFixed(1)}%</div></div>
-      <div class="stat-item"><div class="stat-label">DD improvement</div><div class="stat-val" style="color:var(--teal)">${((sDD - bDD)*100).toFixed(1)}%</div></div>`;
-  } else {
-    statsEl.innerHTML = '<p style="color:var(--muted);font-size:0.85em;">Select a single ETF to see detailed performance stats.</p>';
-  }
+  document.getElementById('pf-stats').innerHTML = `
+    <div class="stat-item"><div class="stat-label">Strategy return</div><div class="stat-val" style="color:var(--blue)">${sRet}%</div></div>
+    <div class="stat-item"><div class="stat-label">Buy &amp; hold return</div><div class="stat-val" style="color:#666">${bRet}%</div></div>
+    <div class="stat-item"><div class="stat-label">Strategy max drawdown</div><div class="stat-val" style="color:var(--blue)">${(sDD*100).toFixed(1)}%</div></div>
+    <div class="stat-item"><div class="stat-label">Buy &amp; hold max drawdown</div><div class="stat-val" style="color:#666">${(bDD*100).toFixed(1)}%</div></div>
+    <div class="stat-item"><div class="stat-label">DD improvement</div><div class="stat-val" style="color:var(--teal)">${((sDD-bDD)*100).toFixed(1)}%</div></div>`;
 }
 
 function buildPfSummaryTable() {
   const rows = TICKERS.map(t => {
     const d = pfData[t]; if (!d || !d.length) return null;
-    const last = d[d.length - 1];
-    let sPeak = 0, sDD = 0, bPeak = 0, bDD = 0;
+    const last = d[d.length-1];
+    let sPeak=0, sDD=0, bPeak=0, bDD=0;
     d.forEach(v => {
-      sPeak = Math.max(sPeak, v.strategy);
-      sDD = Math.min(sDD, (v.strategy - sPeak) / sPeak);
-      bPeak = Math.max(bPeak, v.buyhold);
-      bDD = Math.min(bDD, (v.buyhold - bPeak) / bPeak);
+      sPeak = Math.max(sPeak, v.strategy); sDD = Math.min(sDD, (v.strategy-sPeak)/sPeak);
+      bPeak = Math.max(bPeak, v.buyhold);  bDD = Math.min(bDD, (v.buyhold-bPeak)/bPeak);
     });
     return {
-      ticker: t,
-      name: NAMES[t],
-      sRet: ((last.strategy - 1) * 100).toFixed(1),
-      bRet: ((last.buyhold - 1) * 100).toFixed(1),
-      sDD: (sDD * 100).toFixed(1),
-      bDD: (bDD * 100).toFixed(1),
-      ddImprove: ((sDD - bDD) * 100).toFixed(1)
+      ticker: t, name: NAMES[t],
+      sRet: ((last.strategy-1)*100).toFixed(1), bRet: ((last.buyhold-1)*100).toFixed(1),
+      sDD: (sDD*100).toFixed(1), bDD: (bDD*100).toFixed(1),
+      ddImprove: ((sDD-bDD)*100).toFixed(1)
     };
   }).filter(Boolean);
 
-  const html = `
+  document.getElementById('pf-summary-table').innerHTML = `
     <p style="font-size:0.85em;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.8px;">
       All-ETF Performance Summary (Dynamic Strategy vs. Buy &amp; Hold)
     </p>
     <table class="data-table">
-      <tr>
-        <th>ETF</th><th>Sector</th>
-        <th>Strategy Return</th><th>B&amp;H Return</th>
-        <th>Strategy Max DD</th><th>B&amp;H Max DD</th>
-        <th>DD Improvement</th>
-      </tr>
-      ${rows.map(r => `
-      <tr>
+      <tr><th>ETF</th><th>Sector</th><th>Strategy Return</th><th>B&amp;H Return</th><th>Strategy Max DD</th><th>B&amp;H Max DD</th><th>DD Improvement</th></tr>
+      ${rows.map(r => `<tr>
         <td><strong style="color:${COLORS[r.ticker]}">${r.ticker}</strong></td>
         <td>${r.name}</td>
         <td style="color:var(--blue)">${r.sRet}%</td>
         <td style="color:#666">${r.bRet}%</td>
         <td style="color:var(--blue)">${r.sDD}%</td>
         <td style="color:#666">${r.bDD}%</td>
-        <td style="color:${parseFloat(r.ddImprove) > 0 ? 'var(--accent)' : 'var(--teal)'};font-weight:600">${r.ddImprove}%</td>
+        <td style="color:${parseFloat(r.ddImprove)>0?'var(--accent)':'var(--teal)'};font-weight:600">${r.ddImprove}%</td>
       </tr>`).join('')}
     </table>
     <p class="muted" style="font-size:0.8em;margin-top:6px;">DD = Maximum drawdown from peak. Positive DD Improvement means the dynamic strategy had a smaller drawdown (less negative).</p>`;
-
-  document.getElementById('pf-summary-table').innerHTML = html;
 }
 
+// ── VIZ 5: Return Distribution (D3) ──────────────────────────────────────
 function buildViz5() {
   const years = [...new Set(RAW_DATA.map(d=>d.year))].sort();
   const ySel = document.getElementById('dist-year');
   years.forEach(y => { const o=document.createElement('option'); o.value=y; o.textContent=y; ySel.appendChild(o); });
 
-  const margin={top:16,right:20,bottom:44,left:50};
+  const margin={top:22,right:20,bottom:44,left:50};
   const W=760, H=300;
   const svg = d3.select('#dist-svg').attr('width',W+margin.left+margin.right).attr('height',H+margin.top+margin.bottom);
   window._distG = svg.append('g').attr('transform',`translate(${margin.left},${margin.top})`);
@@ -980,29 +1014,58 @@ function buildViz5() {
   window._distYG = window._distG.append('g');
   window._distG.append('text').attr('x',W/2).attr('y',H+38).attr('text-anchor','middle').style('font-size','11px').style('fill','var(--muted)').text('Daily Return (%)');
   window._distG.append('text').attr('transform','rotate(-90)').attr('x',-H/2).attr('y',-36).attr('text-anchor','middle').style('font-size','11px').style('fill','var(--muted)').text('Frequency');
+  // Label inside SVG that shows active date range from cross-link
+  window._distRangeLabel = window._distG.append('text')
+    .attr('x', W).attr('y', -6).attr('text-anchor','end')
+    .style('font-size','10px').style('fill','var(--purple)').style('font-weight','600');
 
+  updateDistribution();
+}
+
+// Called when year dropdown changes — clears the cross-link date filter
+function onYearChange() {
+  _linkedDateRange = null;
+  document.getElementById('dist-range-badge').style.display = 'none';
+  updateDistribution();
+}
+
+// Called by "clear date filter" badge
+function clearDateRange() {
+  _linkedDateRange = null;
+  document.getElementById('dist-range-badge').style.display = 'none';
   updateDistribution();
 }
 
 function updateDistribution() {
   const ticker = document.getElementById('dist-sector').value;
-  const year = document.getElementById('dist-year').value;
+  const year   = document.getElementById('dist-year').value;
   const g=window._distG, W=window._distW, H=window._distH, tooltip=window._distTooltip;
 
   let filtered = RAW_DATA.filter(d => d.ticker===ticker);
-  if (year!=='all') filtered = filtered.filter(d=>d.year===year);
+
+  if (_linkedDateRange) {
+    // Cross-link active: filter by Viz 1 brush date range
+    filtered = filtered.filter(d => d.dateObj >= _linkedDateRange.start && d.dateObj <= _linkedDateRange.end);
+    if (window._distRangeLabel) {
+      const fmt = d3.timeFormat('%b %d, %Y');
+      window._distRangeLabel.text('Period: ' + fmt(_linkedDateRange.start) + ' \u2013 ' + fmt(_linkedDateRange.end));
+    }
+  } else {
+    if (year !== 'all') filtered = filtered.filter(d=>d.year===year);
+    if (window._distRangeLabel) window._distRangeLabel.text('');
+  }
 
   const normalRet = filtered.filter(d=>d.regime===0).map(d=>d.returns*100);
-  const highRet = filtered.filter(d=>d.regime===1).map(d=>d.returns*100);
+  const highRet   = filtered.filter(d=>d.regime===1).map(d=>d.returns*100);
 
-  const mean=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:0;
-  const std=a=>{if(a.length<2)return 0;const m=mean(a);return Math.sqrt(a.reduce((s,v)=>s+(v-m)**2,0)/(a.length-1));};
+  const mean = a => a.length ? a.reduce((s,v)=>s+v,0)/a.length : 0;
+  const std  = a => { if(a.length<2)return 0; const m=mean(a); return Math.sqrt(a.reduce((s,v)=>s+(v-m)**2,0)/(a.length-1)); };
 
   document.getElementById('dist-stats').innerHTML = `
-    <div class="stat-item"><div class="stat-label">Normal — mean</div><div class="stat-val" style="color:var(--blue-light)">${mean(normalRet).toFixed(3)}%</div></div>
-    <div class="stat-item"><div class="stat-label">Normal — std dev</div><div class="stat-val" style="color:var(--blue-light)">${std(normalRet).toFixed(3)}%</div></div>
-    <div class="stat-item"><div class="stat-label">High — mean</div><div class="stat-val" style="color:var(--accent)">${mean(highRet).toFixed(3)}%</div></div>
-    <div class="stat-item"><div class="stat-label">High — std dev</div><div class="stat-val" style="color:var(--accent)">${std(highRet).toFixed(3)}%</div></div>
+    <div class="stat-item"><div class="stat-label">Normal &mdash; mean</div><div class="stat-val" style="color:var(--blue-light)">${mean(normalRet).toFixed(3)}%</div></div>
+    <div class="stat-item"><div class="stat-label">Normal &mdash; std dev</div><div class="stat-val" style="color:var(--blue-light)">${std(normalRet).toFixed(3)}%</div></div>
+    <div class="stat-item"><div class="stat-label">High &mdash; mean</div><div class="stat-val" style="color:var(--accent)">${mean(highRet).toFixed(3)}%</div></div>
+    <div class="stat-item"><div class="stat-label">High &mdash; std dev</div><div class="stat-val" style="color:var(--accent)">${std(highRet).toFixed(3)}%</div></div>
     <div class="stat-item"><div class="stat-label">Observations</div><div class="stat-val">${normalRet.length} / ${highRet.length}</div></div>`;
 
   const allRet = [...normalRet, ...highRet];
