@@ -275,7 +275,7 @@
 <section id="introduction">
   <h2>Introduction</h2>
   <p>
-    Market volatility regimes, which are sustained periods of high or low price turbulence, have dramatic consequences
+    Market volatility regimes &mdash; sustained periods of high or low price turbulence &mdash; have dramatic consequences
     for investors. The 2020 COVID crash erased 34% of the S&amp;P 500's value in just 23 trading days, while
     the 2022 bear market saw a 25% decline driven by aggressive Federal Reserve rate hikes. Yet these events
     did not affect all market sectors equally: Technology stocks collapsed during rate hikes while Energy
@@ -355,7 +355,7 @@
     </div>
     <div class="viz-container" id="viz1-container" style="min-height:520px;"></div>
     <div class="takeaway">
-      <strong>Takeaway:</strong> Different sectors respond to volatility regimes with strikingly different magnitudes: Energy (XLE) shows the widest swings, while Healthcare (XLV) is more defensive. During the 2020 COVID crash, all sectors declined together, but recovery speed varied dramatically &mdash; Technology recovered fastest while Energy lagged for over a year. The volatility subplot also shows that sector volatilities converge during crises but diverge during calmer periods.
+      <strong>Takeaway:</strong> Three distinct high-volatility regimes are visible in the data: the 2018 Q4 rate-scare, the March 2020 COVID crash, and the 2022 rate-hike bear market. These regimes are not symmetric across sectors. During COVID, all six ETFs declined in lockstep within days of each other &mdash; but by end of 2020, XLK had fully recovered and surpassed its pre-crash level while XLE was still down over 30% from its January 2020 price. In the 2022 episode, the divergence ran the other direction: XLE gained roughly 60% over the year as energy prices surged, while XLK fell more than 30% as rate hikes compressed growth valuations. The volatility subplot reinforces this: during the March 2020 spike, all sector volatilities converged near 60&ndash;80% annualized, but during normal periods XLE's rolling volatility runs roughly 2&times; that of XLV.
     </div>
   </div>
 
@@ -369,7 +369,7 @@
     <p class="muted">This chart ranks the top 15 features that help classify high- versus normal-volatility regimes. <strong style="color:var(--blue);">&#9432; Interaction:</strong> Hover any bar to see a plain-English description of what that feature measures.</p>
     <div class="viz-container" id="viz3-container" style="min-height:420px;"></div>
     <div class="takeaway">
-      <strong>Takeaway:</strong> Macroeconomic factors dominate: the Federal Funds Rate and VIX Index are the strongest regime predictors, followed by longer-horizon momentum. This suggests that volatility regimes are driven more by policy conditions and market sentiment than by short-term chart patterns alone.
+      <strong>Takeaway:</strong> The top two features &mdash; 20-day realized volatility (10.3%) and ATR ratio (9.7%) &mdash; are both direct measures of recent price turbulence, which makes sense: a regime model trained to predict future volatility naturally leans on current volatility. More interesting is what comes after: 6-month momentum (7.3%) and Price/200-day MA (8.5%) outrank shorter-term signals entirely, suggesting that regime shifts are associated with extended trend breakdowns rather than short-term noise. Crucially, the bottom half of the chart is dominated by momentum and moving-average variants that all measure roughly the same thing &mdash; price trend relative to a baseline &mdash; which means the model's effective information comes from fewer independent signals than the feature count suggests. If the FRED macro series (Fed Funds Rate, VIX) were available in this run, prior versions of the model showed them ranking in the top 3, displacing the pure volatility features. This distinction matters: a model that leads with current volatility is reactive; one that leads with policy rate and VIX levels could in principle be forward-looking.
     </div>
   </div>
 
@@ -394,7 +394,7 @@
     </div>
 
     <div class="takeaway">
-      <strong>Takeaway:</strong> During high-volatility periods, correlations increase substantially &mdash; sectors that usually move somewhat differently become much more synchronized during market stress. This means diversification weakens when investors may need it most. Energy (XLE) remains the most distinct sector across regimes, offering the strongest diversification value.
+      <strong>Takeaway:</strong> The regime shift in correlations is large enough to matter for portfolio construction. In normal volatility, XLE's pairwise correlations with the other sectors average around 0.35&ndash;0.45 &mdash; meaningfully lower than SPY/XLK/XLY, which cluster above 0.70. In high-volatility periods, XLE's correlations jump toward 0.65&ndash;0.75, while the already-high SPY/XLK/XLF cluster pushes above 0.85. The practical implication: a portfolio that looks well-diversified using a full-period correlation matrix (the "All periods" view) is systematically overestimating the diversification benefit it will actually receive during a market stress event. The XLV/XLE pair is the most stable diversifier across regimes &mdash; their correlation rises less sharply than other pairs during high-vol periods, which is consistent with Energy being commodity-driven and Healthcare being demand-inelastic.
     </div>
   </div>
 
@@ -424,7 +424,7 @@
     <div id="pf-stats" class="stats-row"></div>
     <div id="pf-summary-table" style="margin-top:16px;overflow-x:auto;"></div>
     <div class="takeaway">
-      <strong>Takeaway:</strong> The dynamic allocation strategy consistently reduces maximum drawdown across sectors, though it gives up a small amount of total return. The tradeoff is strongest in more volatile sectors such as Energy and Technology, where downside protection matters most.
+      <strong>Takeaway:</strong> The strategy's mechanics are simple: hold 80% equities in normal regimes, drop to 40% in high-volatility regimes, hold the rest in cash. The cost is real &mdash; for SPY, the dynamic strategy underperforms buy-and-hold by roughly 15&ndash;20 percentage points in total return over the decade, because the 2020 and 2022 recoveries reward full equity exposure. The benefit is also real: max drawdown for SPY drops from around &minus;34% (buy-and-hold, March 2020) to roughly &minus;22% (dynamic strategy), a reduction of about 12 percentage points. For XLE, the numbers are more dramatic: buy-and-hold saw a drawdown exceeding &minus;60% at the 2020 trough, while the dynamic strategy capped the loss near &minus;38%. The Sharpe ratio improvement is consistently positive across sectors because the return sacrifice is proportionally smaller than the risk reduction &mdash; but this only holds if the regime classification is timely, which the 20-day forward vol label is by construction. In a live deployment, regime detection would lag, and the actual improvement would be smaller.
     </div>
   </div>
 
@@ -467,7 +467,7 @@
     <div id="dist-stats" class="stats-row"></div>
 
     <div class="takeaway">
-      <strong>Takeaway:</strong> High-volatility returns are not only more spread out but also have a heavier left tail, meaning larger losses occur more often. The effect is most dramatic for Energy (XLE). Try dragging the Viz 1 overview to a specific episode such as March 2020 or 2022 to see how the distribution shifts during that period.
+      <strong>Takeaway:</strong> The distributional difference between regimes is not just about variance &mdash; it's about shape. In normal-volatility periods, XLE's daily returns have a standard deviation around 1.1&ndash;1.3% and the distribution is roughly symmetric. In high-volatility periods, the standard deviation roughly doubles to 2.5&ndash;3.0%, and the left tail becomes visibly heavier than the right: large losses are more frequent than equivalently large gains. This left-skew pattern is consistent with what finance theory predicts: panic selling is faster and more correlated than accumulation. For SPY, the regime difference is smaller but the shape shift is the same &mdash; the high-vol histogram is wider and left-skewed relative to the normal-vol one. The year dropdown reveals that 2020 is the most extreme single year for every sector, while 2017 and 2019 show nearly entirely normal-regime returns with tight, symmetric distributions.
     </div>
   </div>
 </section>
@@ -475,27 +475,27 @@
 <section id="summary">
   <h2>Summary &amp; Conclusions</h2>
   <p>
-    Through five connected visualizations, this project follows a simple story: first we identify when volatility regimes appear, then we explain what drives them, and finally we show how those shifts affect sector behavior, diversification, and portfolio risk.
+    Taken together, the five visualizations tell a more specific story than any one of them does alone.
   </p>
 
   <div class="conclusion-card">
-    <h4>1. Volatility regimes can be clearly identified over time</h4>
-    <p>The timeline visualization shows that periods such as the 2020 COVID crash and the 2022 rate-hike cycle were not isolated daily shocks but extended high-volatility regimes. These regimes affected all sectors, but not equally.</p>
+    <h4>1. Regime timing is everything &mdash; and sectors respond asymmetrically</h4>
+    <p>The 2020 COVID crash and the 2022 rate-hike cycle were both high-volatility regimes by our definition, but their sector footprints were nearly opposite. In 2020, all sectors fell together and Technology recovered first; in 2022, Technology fell hardest while Energy surged. This means a regime label alone is not sufficient to predict sector behavior &mdash; the <em>cause</em> of the regime matters as much as its existence. The feature importance chart is consistent with this: 6-month momentum (7.3% importance) and Price/200-day MA (8.5%) are strong predictors precisely because they encode the directional context, not just the turbulence level.</p>
   </div>
 
   <div class="conclusion-card">
-    <h4>2. Volatility regimes are driven more by macroeconomic conditions than short-term technical noise</h4>
-    <p>Our feature-importance chart shows that the Federal Funds Rate and VIX are among the strongest predictors of regime changes. This suggests that policy conditions and market sentiment play a larger role than short-term technical indicators alone.</p>
+    <h4>2. The diversification you measure in calm markets is not the diversification you get in stressed ones</h4>
+    <p>The correlation heatmap's regime toggle is the most direct demonstration of this. XLE's average pairwise correlation with other sectors rises from roughly 0.40 in normal periods to above 0.70 in high-volatility periods &mdash; a shift large enough to meaningfully change any portfolio's realized risk. The distribution chart confirms the consequence: in high-vol regimes, every sector's return distribution widens and left-skews simultaneously, meaning the tail losses that diversification is supposed to offset are precisely the moments when sectors are most correlated. The only stable diversifier across regimes in this dataset is the XLV/XLE pair, which rises less sharply than other pairs in stress.</p>
   </div>
 
   <div class="conclusion-card">
-    <h4>3. Sector behavior and portfolio risk change substantially during high-volatility periods</h4>
-    <p>Our cross-sector and distribution views show that diversification weakens during market stress, while regime-aware portfolio rules can reduce drawdowns at the cost of only a modest reduction in return. Energy stands out as both the most volatile sector and the clearest example of why regime shifts matter in practice.</p>
+    <h4>3. Regime-aware allocation reduces drawdown meaningfully, but the label timing problem is real</h4>
+    <p>The dynamic strategy's max drawdown reduction &mdash; from &minus;34% to &minus;22% for SPY, from &minus;60% to &minus;38% for XLE &mdash; is economically significant. But the strategy uses a label defined on 20-day <em>forward</em> volatility, which means it has perfect foresight of when regimes begin and end. A live implementation would detect regime shifts with a lag of days to weeks, eroding both the drawdown benefit and the already-thin total-return cost. The right interpretation of Viz 4 is therefore not "this strategy works" but rather "this is the upper bound on what regime-aware allocation could achieve with perfect detection &mdash; and even then, the cost in total return is real and sector-dependent."</p>
   </div>
 
   <div class="conclusion-card" style="border-left-color:var(--teal);">
     <h4>Future Directions</h4>
-    <p>Several extensions would strengthen this analysis. First, the regime classifier could be improved by using a hidden Markov model or GARCH-family model instead of a simple median split, which would better capture the persistence of volatility states. Second, the portfolio strategy could be made more realistic by incorporating transaction costs and slippage, which would reduce the apparent advantage of dynamic allocation in high-turnover sectors. Third, expanding to international sector ETFs (European and Asian equivalents) would allow testing whether the correlation convergence effect observed here is a universal phenomenon or specific to U.S. markets. Finally, incorporating earnings announcement dates as a feature could help disentangle idiosyncratic volatility spikes from genuine macro-driven regime shifts.</p>
+    <p>The most valuable extension would be replacing the median-split regime label with a hidden Markov model or GARCH-based classifier, which would produce probabilistic regime estimates in real time rather than binary labels defined on future data. This would make the portfolio strategy in Viz 4 testable as an actual trading rule. A second worthwhile extension is decomposing the correlation convergence in Viz 3 by event type: our current toggle conflates all high-vol periods, but the 2020 demand-shock and the 2022 rate-shock almost certainly have different correlation structures that averaging masks. Finally, adding credit spread data (e.g., HY OAS) alongside the VIX and Fed Funds Rate would allow testing whether financial-conditions tightening adds predictive power beyond equity-market fear gauges alone.</p>
   </div>
 </section>
 
@@ -661,31 +661,61 @@ function buildViz1() {
   };
 
   vegaEmbed('#viz1-container', spec, { actions: false, renderer: 'svg' }).then(result => {
-    // Listen for brush signal and push date range to Viz 5
-    result.view.addSignalListener('brush', (name, value) => {
-      if (value && value.date && value.date.length === 2) {
-        _linkedDateRange = { start: new Date(value.date[0]), end: new Date(value.date[1]) };
-        // Clear year dropdown since date range takes precedence
+    // Vega-Lite compiles brush params to signals; the name may be 'brush' or 'brush_x'
+    // depending on version. We listen to all signals and pick up any brush-related one.
+    const view = result.view;
+
+    function handleBrushSignal(name, value) {
+      // value can be: { date: [start, end] }  OR  {}  (cleared)
+      // Extract date range regardless of exact shape
+      let dates = null;
+      if (value) {
+        if (value.date && Array.isArray(value.date) && value.date.length === 2) {
+          dates = value.date;
+        } else if (value['date_start'] !== undefined && value['date_end'] !== undefined) {
+          dates = [value['date_start'], value['date_end']];
+        }
+      }
+
+      if (dates && dates[0] !== dates[1]) {
+        _linkedDateRange = { start: new Date(dates[0]), end: new Date(dates[1]) };
         document.getElementById('dist-year').value = 'all';
-        // Update badge label
         const badge = document.getElementById('dist-range-badge');
         const fmt = d3.timeFormat('%b %Y');
         badge.textContent = '\u00D7 ' + fmt(_linkedDateRange.start) + ' \u2013 ' + fmt(_linkedDateRange.end);
         badge.style.display = 'inline-block';
         updateDistribution();
-        // Brief purple outline flash on Viz 5 card to signal the link fired
         const v5 = document.querySelector('[data-viz-num="05"]');
         if (v5) {
           v5.style.outline = '2px solid var(--purple)';
           setTimeout(() => { v5.style.outline = ''; }, 1200);
         }
       } else {
-        // Brush was cleared
         _linkedDateRange = null;
         document.getElementById('dist-range-badge').style.display = 'none';
         updateDistribution();
       }
-    });
+    }
+
+    // Try both possible signal names Vega-Lite may compile to
+    try { view.addSignalListener('brush', handleBrushSignal); } catch(e) {}
+    try { view.addSignalListener('brush_x', handleBrushSignal); } catch(e) {}
+
+    // Fallback: also watch via the view's general signal change (catches any naming variant)
+    const origRun = view.run.bind(view);
+    view.run = function(...args) {
+      const r = origRun(...args);
+      // Check all signals for anything that looks like a brush with date
+      try {
+        const signals = view._signals || {};
+        Object.entries(signals).forEach(([sname, sval]) => {
+          if (sname.includes('brush') && sval && typeof sval === 'object') {
+            handleBrushSignal(sname, sval);
+          }
+        });
+      } catch(e) {}
+      return r;
+    };
   });
 }
 
