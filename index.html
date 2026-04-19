@@ -250,7 +250,7 @@
 <section id="introduction">
   <h2>Introduction</h2>
   <p>
-    Market volatility regimes—sustained periods of high or low price turbulence—have dramatic consequences
+    Market volatility regimes &mdash; sustained periods of high or low price turbulence &mdash; have dramatic consequences
     for investors. The 2020 COVID crash erased 34% of the S&amp;P 500's value in just 23 trading days, while
     the 2022 bear market saw a 25% decline driven by aggressive Federal Reserve rate hikes. Yet these events
     did not affect all market sectors equally: Technology stocks collapsed during rate hikes while Energy
@@ -274,8 +274,19 @@
     macroeconomic indicators from the <strong>Federal Reserve Economic Data (FRED)</strong> database.
     The final cleaned dataset contains <strong>15,822 observations</strong> across <strong>6 ETFs</strong>,
     each with <strong>28 engineered features</strong>, spanning from October 2015 through November 2025.
-    Features include a mix of continuous variables (rolling volatility, RSI, momentum scores, VIX level)
-    and categorical variables (moving average crossover signal, binary volatility regime label).
+  </p>
+  <p>
+    Features are organized into five thematic groups:
+  </p>
+  <ul style="margin: 0 0 14px 1.4em; line-height: 2;">
+    <li><strong>Market prices and returns:</strong> daily close price, daily return, 5-day, 20-day, and 63-day price changes (per ETF)</li>
+    <li><strong>Volatility measures:</strong> 5-, 10-, 20-, and 50-day realized volatility (annualized), short/long volatility ratio, and short/medium term structure ratio</li>
+    <li><strong>Technical indicators:</strong> RSI (14-day), Bollinger Band width and position, ATR ratio, moving average crossover signal, distance from 10-day and 50-day MAs, and 1-, 3-, and 6-month momentum scores</li>
+    <li><strong>Volume signals:</strong> 10-day average volume, 50-day average volume, and the ratio between them as a proxy for unusual activity</li>
+    <li><strong>Macroeconomic conditions:</strong> VIX (VIXCLS), Federal Funds Rate (DFF), and Unemployment Rate (UNRATE) from FRED, all forward-filled to align with daily trading data</li>
+  </ul>
+  <p>
+    The target variable is a <strong>binary volatility regime label</strong>: each observation is classified as "High" if its 20-day forward realized volatility exceeds the SPY median (approximately 14.8% annualized), and "Normal" otherwise. For data cleaning, rows with missing values resulting from rolling-window calculations (requiring at least 200 trading days of history) were dropped, and pre-2015 data were excluded due to incomplete FRED series coverage. The FRED macro series were merged by date and forward-filled across weekends and holidays.
   </p>
 
   <table class="data-table">
@@ -331,7 +342,7 @@
       <span class="viz-badge badge-altair">Altair</span>
       <span class="viz-badge badge-interactive">Interactive</span>
     </h3>
-    <p class="muted">This chart shows how sector ETF prices and rolling volatility change over time. Drag on the overview chart at the bottom to zoom into a time period, and hover for details.</p>
+    <p class="muted">This chart shows how sector ETF prices and rolling volatility change over time. <strong style="color:var(--blue);">&#9432; Interaction:</strong> Drag the shaded region on the <em>overview chart at the bottom</em> to zoom into any date range. Hover over the lines for exact values. Click and drag again to reset.</p>
     <div class="viz-container" id="viz1-container" style="min-height:520px;"></div>
     <div class="takeaway">
       <strong>Takeaway:</strong> This plot shows how normalized sector ETF prices and rolling volatility evolve over time across different market regimes. Different sectors respond to volatility regimes with strikingly different magnitudes: Energy (XLE) shows the widest swings, while Healthcare (XLV) is more defensive. During the 2020 COVID crash, all sectors declined together, but recovery speed varied dramatically—Technology recovered fastest while Energy lagged for over a year. The volatility subplot also shows that sector volatilities converge during crises but diverge during calmer periods.
@@ -346,14 +357,10 @@
     </h3>
     <p class="muted">This chart ranks the top 15 features that help classify high- versus normal-volatility regimes.</p>
     <div class="viz-container" id="viz3-container" style="min-height:420px;"></div>
+    <p class="muted"><strong>&#9432; Interaction:</strong> Hover any bar to see a plain-English description of what that feature measures and its exact importance score.</p>
     <div class="takeaway">
       <strong>Takeaway:</strong> This bar chart shows which macroeconomic and technical features are most useful for distinguishing high- from normal-volatility regimes. Macroeconomic factors dominate: the Federal Funds Rate and VIX Index are the strongest regime predictors, followed by longer-horizon momentum. This suggests that volatility regimes are driven more by policy conditions and market sentiment than by short-term chart patterns alone.
     </div>
-  </div>
-
-  <div class="viz-card">
-    <h3>
-      3. Sector Correlation Heatmap
       <span class="viz-badge badge-d3">D3</span>
       <span class="viz-badge badge-interactive">Interactive</span>
     </h3>
@@ -399,6 +406,7 @@
       <div class="tooltip-box" id="pf-tooltip"></div>
     </div>
     <div id="pf-stats" class="stats-row"></div>
+    <div id="pf-summary-table" style="margin-top:16px;overflow-x:auto;"></div>
     <div class="takeaway">
       <strong>Takeaway:</strong> This chart shows cumulative performance for a simple regime-aware strategy versus buy-and-hold. The dynamic allocation strategy consistently reduces maximum drawdown across sectors, though it gives up a small amount of total return. The tradeoff is strongest in more volatile sectors such as Energy and Technology, where downside protection matters most.
     </div>
@@ -471,6 +479,13 @@
       Our cross-sector and distribution views show that diversification weakens during market stress, while regime-aware portfolio rules can reduce drawdowns at the cost of only a modest reduction in return. Energy stands out as both the most volatile sector and the clearest example of why regime shifts matter in practice.
     </p>
   </div>
+
+  <div class="conclusion-card" style="border-left-color:var(--teal);">
+    <h4>Future Directions</h4>
+    <p>
+      Several extensions would strengthen this analysis. First, the regime classifier could be improved by using a hidden Markov model or GARCH-family model instead of a simple median split, which would better capture the persistence of volatility states. Second, the portfolio strategy could be made more realistic by incorporating transaction costs and slippage, which would reduce the apparent advantage of dynamic allocation in high-turnover sectors. Third, expanding to international sector ETFs (European and Asian equivalents) would allow testing whether the correlation convergence effect observed here is a universal phenomenon or specific to U.S. markets. Finally, incorporating earnings announcement dates as a feature could help disentangle idiosyncratic volatility spikes from genuine macro-driven regime shifts.
+    </p>
+  </div>
 </section>
 
 </div>
@@ -499,8 +514,8 @@ if (typeof d3 === 'undefined') {
 }
 
 const COLORS = {
-  SPY: '#0d2137', XLK: '#6c3483', XLF: '#1e8449',
-  XLE: '#b9770e', XLV: '#c0392b', XLY: '#2980b9'
+  SPY: '#1a5276', XLK: '#6c3483', XLF: '#1e8449',
+  XLE: '#b9770e', XLV: '#c0392b', XLY: '#2874a6'
 };
 const NAMES = {
   SPY: 'S&P 500', XLK: 'Technology', XLF: 'Financials',
@@ -527,6 +542,7 @@ d3.csv('data/web_dataset.csv').then(raw => {
   buildViz3();
   buildViz4();
   buildViz5();
+  buildPfSummaryTable();
 }).catch(err => {
   console.error('Failed to load data:', err);
   document.querySelectorAll('.viz-container').forEach(el => {
@@ -723,6 +739,29 @@ function buildViz3() {
   d3.csv('data/feature_importance.csv').then(imp => {
     imp.forEach(d => d.importance = +d.importance);
 
+    const featureDescriptions = {
+      'Volatility (20-day)': '20-day realized volatility: how much prices have swung over the past month (annualized)',
+      'ATR Ratio': 'Average True Range ratio: measures typical daily price range relative to price level',
+      'Volatility (10-day)': '10-day realized volatility: short-term measure of recent price swings',
+      'Price / 200-day MA': 'Current price divided by 200-day moving average — a long-term trend signal',
+      'Volatility (50-day)': '50-day realized volatility: medium-term measure of price swings over ~2 months',
+      'Momentum (6-month)': '6-month price momentum: how much the price has risen or fallen over 126 trading days',
+      'Bollinger Band Width': 'Width of the Bollinger Bands relative to price — wide bands signal high uncertainty',
+      'High/Low Ratio': 'Daily high divided by daily low — a simple proxy for intraday volatility',
+      'Momentum (3-month)': '3-month price momentum: trend signal over approximately 63 trading days',
+      'Volatility (5-day)': '5-day realized volatility: captures very recent, week-level price swings',
+      'Distance from 50-day MA': 'How far the current price sits above or below the 50-day moving average',
+      'Volume Ratio (10d/50d)': 'Ratio of recent to longer-term average volume — elevated ratio signals unusual activity',
+      'Distance from 10-day MA': 'How far the current price sits above or below the 10-day moving average',
+      'Volatility Ratio (10d/50d)': 'Short-term vs. long-term volatility ratio — rising ratio signals increasing turbulence',
+      'Momentum (1-month)': '1-month price momentum: very short-term trend signal over ~21 trading days',
+      'Fed Funds Rate': 'Federal Reserve benchmark interest rate — key driver of broader financial conditions',
+      'VIX Index': "CBOE Volatility Index: the market's real-time \"fear gauge\" based on S&P 500 options pricing",
+      'Unemployment Rate': 'U.S. unemployment rate from FRED — a lagging macro indicator of economic stress'
+    };
+
+    imp.forEach(d => d.description = featureDescriptions[d.feature_name] || d.feature_name);
+
     const catColors = {
       Macroeconomic:'#c0392b', Volatility:'#e67e22', Momentum:'#2980b9',
       Trend:'#27ae60', 'Range / Bands':'#8e44ad', Volume:'#16a085'
@@ -742,6 +781,7 @@ function buildViz3() {
               scale:{ domain:Object.keys(catColors), range:Object.values(catColors) } },
             tooltip:[
               {field:'feature_name',type:'nominal',title:'Feature'},
+              {field:'description',type:'nominal',title:'What it measures'},
               {field:'category',type:'nominal',title:'Category'},
               {field:'importance',type:'quantitative',title:'Importance',format:'.4f'}
             ]
@@ -874,6 +914,55 @@ function updatePortfolio() {
   } else {
     statsEl.innerHTML = '<p style="color:var(--muted);font-size:0.85em;">Select a single ETF to see detailed performance stats.</p>';
   }
+}
+
+function buildPfSummaryTable() {
+  const rows = TICKERS.map(t => {
+    const d = pfData[t]; if (!d || !d.length) return null;
+    const last = d[d.length - 1];
+    let sPeak = 0, sDD = 0, bPeak = 0, bDD = 0;
+    d.forEach(v => {
+      sPeak = Math.max(sPeak, v.strategy);
+      sDD = Math.min(sDD, (v.strategy - sPeak) / sPeak);
+      bPeak = Math.max(bPeak, v.buyhold);
+      bDD = Math.min(bDD, (v.buyhold - bPeak) / bPeak);
+    });
+    return {
+      ticker: t,
+      name: NAMES[t],
+      sRet: ((last.strategy - 1) * 100).toFixed(1),
+      bRet: ((last.buyhold - 1) * 100).toFixed(1),
+      sDD: (sDD * 100).toFixed(1),
+      bDD: (bDD * 100).toFixed(1),
+      ddImprove: ((sDD - bDD) * 100).toFixed(1)
+    };
+  }).filter(Boolean);
+
+  const html = `
+    <p style="font-size:0.85em;font-weight:600;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.8px;">
+      All-ETF Performance Summary (Dynamic Strategy vs. Buy &amp; Hold)
+    </p>
+    <table class="data-table">
+      <tr>
+        <th>ETF</th><th>Sector</th>
+        <th>Strategy Return</th><th>B&amp;H Return</th>
+        <th>Strategy Max DD</th><th>B&amp;H Max DD</th>
+        <th>DD Improvement</th>
+      </tr>
+      ${rows.map(r => `
+      <tr>
+        <td><strong style="color:${COLORS[r.ticker]}">${r.ticker}</strong></td>
+        <td>${r.name}</td>
+        <td style="color:var(--blue)">${r.sRet}%</td>
+        <td style="color:#666">${r.bRet}%</td>
+        <td style="color:var(--blue)">${r.sDD}%</td>
+        <td style="color:#666">${r.bDD}%</td>
+        <td style="color:${parseFloat(r.ddImprove) > 0 ? 'var(--accent)' : 'var(--teal)'};font-weight:600">${r.ddImprove}%</td>
+      </tr>`).join('')}
+    </table>
+    <p class="muted" style="font-size:0.8em;margin-top:6px;">DD = Maximum drawdown from peak. Positive DD Improvement means the dynamic strategy had a smaller drawdown (less negative).</p>`;
+
+  document.getElementById('pf-summary-table').innerHTML = html;
 }
 
 function buildViz5() {
