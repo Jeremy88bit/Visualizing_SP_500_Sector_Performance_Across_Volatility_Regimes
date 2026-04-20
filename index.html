@@ -423,8 +423,10 @@
           <div style="display:flex;justify-content:space-between;font-size:0.75em;color:var(--muted);margin-top:3px;"><span>0% (all cash)</span><span>80%</span></div>
         </div>
       </div>
-      <div style="font-size:0.8em;color:var(--muted);">Cash earns 0% (conservative assumption). The regime label uses 20-day forward volatility, so results represent an upper bound on live performance.</div>
+      <div style="font-size:0.8em;color:var(--muted);margin-bottom:10px;">Cash earns 0% (conservative assumption). The regime label uses 20-day forward volatility, so results represent an upper bound on live performance.</div>
+      <button class="ctrl-btn" onclick="optimizeAllocations()" style="font-size:0.82em;">&#9650; Find max-Sharpe allocation for all ETFs</button>
     </div>
+    <div id="pf-optimal-table" style="margin-bottom:16px;display:none;"></div>
 
     <div class="controls-row">
       <label for="pf-select">Select ETF:</label>
@@ -987,6 +989,133 @@ function calcSharpe(returns) {
   const std = Math.sqrt(variance);
   if (std === 0) return 0;
   return (mean / std) * Math.sqrt(252);
+}
+
+function computeStrategyStats(rows, nAlloc, hAlloc) {
+  // nAlloc and hAlloc are fractions (0–1)
+  const sRets = rows.map(d => d.returns * (d.regime === 0 ? nAlloc : hAlloc));
+  const bRets = rows.map(d => d.returns);
+  const sharpe = calcSharpe(sRets);
+
+  let sCum=1, bCum=1, sPeak=0, sDD=0, bPeak=0, bDD=0;
+  rows.forEach((d, i) => {
+    sCum *= (1 + sRets[i]);
+    bCum *= (1 + bRets[i]);
+    sPeak = Math.max(sPeak, sCum); sDD = Math.min(sDD, (sCum - sPeak) / sPeak);
+    bPeak = Math.max(bPeak, bCum); bDD = Math.min(bDD, (bCum - bPeak) / bPeak);
+  });
+
+  return {
+    sharpe,
+    totalReturn: (sCum - 1) * 100,
+    bReturn: (bCum - 1) * 100,
+    maxDD: sDD * 100,
+    bDD: bDD * 100
+  };
+}
+
+function optimizeAllocations() {
+  const btn = event.currentTarget;
+  btn.textContent = 'Computing...';
+  btn.disabled = true;
+
+  // Run after a tick so the UI updates before the heavy loop
+  setTimeout(() => {
+    const normalSteps = [50,55,60,65,70,75,80,85,90,95,100];
+    const highSteps   = [0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80];
+
+    const results = TICKERS.map(ticker => {
+      const rows = pfRawRows[ticker];
+      if (!rows || !rows.length) return null;
+
+      let best = { sharpe: -Infinity, nAlloc: 80, hAlloc: 40 };
+      normalSteps.forEach(n => {
+        highSteps.forEach(h => {
+          if (h >= n) return; // high-vol alloc must be <= normal alloc
+          const stats = computeStrategyStats(rows, n/100, h/100);
+          if (stats.sharpe > best.sharpe) {
+            best = { sharpe: stats.sharpe, nAlloc: n, hAlloc: h, ...stats };
+          }
+        });
+      });
+
+      // Also compute B&H stats for comparison
+      const bhStats = computeStrategyStats(rows, 1.0, 1.0);
+
+      return { ticker, ...best, bSharpe: calcSharpe(rows.map(d=>d.returns)), bReturn: bhStats.totalReturn, bDD: best.bDD };
+    }).filter(Boolean);
+
+    // Render table
+    const tableHTML = `
+      <div style="background:#f0f7ff;border:1px solid #b8d4f0;border-radius:8px;padding:16px 20px;">
+        <p style="font-size:0.85em;font-weight:600;color:var(--blue);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.8px;">
+          Max-Sharpe Optimal Allocation by ETF
+        </p>
+        <table class="data-table">
+          <tr>
+            <th>ETF</th>
+            <th>Optimal Normal Alloc</th>
+            <th>Optimal High-Vol Alloc</th>
+            <th>Strategy Sharpe</th>
+            <th>B&amp;H Sharpe</th>
+            <th>Sharpe Improvement</th>
+            <th>Strategy Return</th>
+            <th>Strategy Max DD</th>
+          </tr>
+          ${results.map(r => {
+            const sharpeImprove = (r.sharpe - r.bSharpe).toFixed(2);
+            const sharpeColor = r.sharpe >= r.bSharpe ? 'var(--teal)' : 'var(--accent)';
+            return `<tr>
+              <td><strong style="color:${COLORS[r.ticker]}">${r.ticker}</strong></td>
+              <td style="font-weight:600;color:var(--blue)">${r.nAlloc}%</td>
+              <td style="font-weight:600;color:var(--accent)">${r.hAlloc}%</td>
+              <td style="font-weight:600;color:${sharpeColor}">${r.sharpe.toFixed(2)}</td>
+              <td style="color:#666">${r.bSharpe.toFixed(2)}</td>
+              <td style="font-weight:600;color:${sharpeColor}">${sharpeImprove >= 0 ? '+' : ''}${sharpeImprove}</td>
+              <td style="color:var(--blue)">${r.totalReturn.toFixed(1)}%</td>
+              <td style="color:var(--blue)">${r.maxDD.toFixed(1)}%</td>
+            </tr>`;
+          }).join('')}
+        </table>
+        <p class="muted" style="font-size:0.8em;margin-top:8px;">Grid search over all (normal, high-vol) allocation pairs in 5% steps where high-vol &le; normal alloc. Click any row's allocation values in the table to apply them to the chart above.</p>
+      </div>`;
+
+    const container = document.getElementById('pf-optimal-table');
+    container.innerHTML = tableHTML;
+    container.style.display = 'block';
+
+    // Make rows clickable to apply that ETF's optimal allocation
+    container.querySelectorAll('tr[data-n]').forEach(row => {
+      row.addEventListener('click', () => {
+        const n = +row.dataset.n, h = +row.dataset.h, t = row.dataset.ticker;
+        document.getElementById('normal-alloc').value = n;
+        document.getElementById('high-alloc').value = h;
+        document.getElementById('pf-select').value = t;
+        onAllocChange();
+        row.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      });
+    });
+
+    // Add data attributes for click-to-apply after building HTML
+    container.querySelectorAll('tbody tr, table tr:not(:first-child)').forEach((row, i) => {
+      if (results[i]) {
+        row.dataset.n = results[i].nAlloc;
+        row.dataset.h = results[i].hAlloc;
+        row.dataset.ticker = results[i].ticker;
+        row.style.cursor = 'pointer';
+        row.title = `Click to apply ${results[i].nAlloc}%/${results[i].hAlloc}% for ${results[i].ticker}`;
+        row.addEventListener('click', () => {
+          document.getElementById('normal-alloc').value = results[i].nAlloc;
+          document.getElementById('high-alloc').value = results[i].hAlloc;
+          document.getElementById('pf-select').value = results[i].ticker;
+          onAllocChange();
+        });
+      }
+    });
+
+    btn.textContent = '&#9650; Find max-Sharpe allocation for all ETFs';
+    btn.disabled = false;
+  }, 20);
 }
 
 function updatePortfolio() {
