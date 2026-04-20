@@ -21,15 +21,17 @@
 3. **Verify you're in the right place.** You should see this structure:
    ```
    DS4200_Project/
-   ├── index.html          ← main website
+   ├── index.html                  ← main website
    ├── data/
    │   ├── web_dataset.csv
    │   └── feature_importance.csv
    ├── design_rationale.docx
    ├── collect_data.py
    ├── viz1_sector_timeline.py
-   ├── viz3_macro_drivers.py
+   ├── viz2_macro_drivers.py
+   ├── viz3_sector_correlation.py
    ├── viz4_portfolio_strategy.py
+   ├── viz5_return_distribution.py
    └── README.md
    ```
 
@@ -56,11 +58,11 @@
 
 | # | Visualization | How to Interact |
 |---|---|---|
-| 1 | Sector Volatility Timeline | **Drag** on the small overview chart at the bottom to zoom into a date range. **Hover** over lines for details. |
-| 2 | Sector Correlation Heatmap | **Click** the "All periods" / "Normal volatility" / "High volatility" buttons to see how correlations change. **Hover** cells for values. |
-| 3 | Volatility Regime Drivers | Static chart — **hover** bars for exact importance values. |
-| 4 | Portfolio Strategy Comparison | Use the **dropdown** to select a specific ETF or view all. **Hover** for details. |
-| 5 | Return Distribution by Regime | Use the **sector dropdown** and **year dropdown** to filter. Bars animate between selections. **Hover** for bin details. |
+| 1 | Sector Volatility Timeline | **Drag** on the small overview chart at the bottom to zoom into a date range. **Hover** over lines for details. Dragging a date window also filters Visualization 5 automatically. |
+| 2 | Volatility Regime Drivers | Static chart — **hover** any bar for the exact importance value and a plain-English description of what that feature measures. |
+| 3 | Sector Correlation Heatmap | **Click** the "All periods" / "Normal volatility" / "High volatility" buttons to see how correlations change across regimes. **Hover** cells for exact values. Click an active button again to return to All periods. |
+| 4 | Portfolio Strategy Comparison | Use the **ETF dropdown** to select a sector. Drag the **allocation sliders** to tune the equity percentage in normal and high-volatility regimes. Click **"Find max-Sharpe allocation"** to automatically find the optimal split for each ETF. |
+| 5 | Return Distribution by Regime | Use the **sector** and **year** dropdowns to filter. Bars animate between selections. **Hover** for bin details. Date range is automatically updated when you brush Visualization 1. |
 
 ---
 
@@ -82,20 +84,22 @@
 
 ## Project Files
 
-| [viz3[viz3_macro_drivers.py](viz3_macro_drivers.py)_macro_drivers.html](viz3_macro_drivers.html)File | De[viz1_sector_timeline.py](viz1_sector_timeline.py)scription |
+| File | Description |
 |---|---|
-| `index.html`[viz4_portfolio_strategy.py](viz4_portfolio_strategy.py) | Main website with all visualizations (HTML/CSS/JS) |
-| `data/web_dataset.csv` | Dataset: 15,822 observations, 6 ETFs, 32 features |
-| `data/feature_importance.csv` | Feature ranking data for Visualization 3 |
-| `design_rationale.docx` | Design rationale document explaining each visualization |
-| `collect_data.py` | Python script used to collect and engineer the data |
-| `viz1_sector_timeline.py` | Altair source code for Visualization 1 |
-| `viz3_macro_drivers.py` | Altair source code for Visualization 3 |
-| `viz4_portfolio_strategy.py` | Altair source code for Visualization 4 |
+| `index.html` | Main website with all 5 interactive visualizations (HTML/CSS/JS) |
+| `data/web_dataset.csv` | Dataset: 15,822 observations, 6 ETFs, 28 features |
+| `data/feature_importance.csv` | Random Forest feature importance scores for Visualization 2 |
+| `design_rationale.docx` | Design rationale document explaining each visualization and peer review responses |
+| `collect_data.py` | Python script used to collect and engineer the dataset |
+| `viz1_sector_timeline.py` | Altair source code for Visualization 1 (Sector Volatility Timeline) |
+| `viz2_macro_drivers.py` | Altair source code for Visualization 2 (Volatility Regime Drivers) |
+| `viz3_sector_correlation.py` | Altair source code for Visualization 3 (Sector Correlation Heatmap) |
+| `viz4_portfolio_strategy.py` | D3 source code for Visualization 4 (Portfolio Strategy Comparison) |
+| `viz5_return_distribution.py` | D3 source code for Visualization 5 (Return Distribution by Regime) |
 
 ---
 
 ## Data Sources
 
 - **Yahoo Finance** — Daily OHLCV price data for SPY, XLK, XLF, XLE, XLV, XLY (2015–2025)
-- **Federal Reserve Economic Data (FRED)** — VIX Index, Federal Funds Rate, Unemployment Rate
+- **Federal Reserve Economic Data (FRED)** — VIX Index (VIXCLS), Federal Funds Rate (DFF), Unemployment Rate (UNRATE)
