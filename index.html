@@ -294,50 +294,84 @@
 
 <section id="data">
   <h2>About the Data</h2>
+
+  <h3>Size and Sources</h3>
   <p>
-    Our dataset combines daily price data for six sector ETFs from <strong>Yahoo Finance</strong> with
-    macroeconomic indicators from the <strong>Federal Reserve Economic Data (FRED)</strong> database.
-    The final cleaned dataset contains <strong>15,822 observations</strong> across <strong>6 ETFs</strong>,
-    each with <strong>28 engineered features</strong>, spanning from October 2015 through November 2025.
+    Our dataset contains <strong>15,822 observations</strong> across <strong>6 sector ETFs</strong>, each with
+    <strong>28 engineered features</strong> plus a binary regime label, spanning from October 2015 through November 2025
+    (approximately 2,637 trading days per ETF).
   </p>
-  <p>Features are organized into five thematic groups:</p>
+  <p>
+    Data comes from two sources:
+  </p>
   <ul style="margin: 0 0 14px 1.4em; line-height: 2;">
-    <li><strong>Market prices and returns:</strong> daily close price, daily return, 5-day, 20-day, and 63-day price changes (per ETF)</li>
-    <li><strong>Volatility measures:</strong> 5-, 10-, 20-, and 50-day realized volatility (annualized), short/long volatility ratio, and short/medium term structure ratio</li>
-    <li><strong>Technical indicators:</strong> RSI (14-day), Bollinger Band width and position, ATR ratio, moving average crossover signal, distance from 10-day and 50-day MAs, and 1-, 3-, and 6-month momentum scores</li>
-    <li><strong>Volume signals:</strong> 10-day average volume, 50-day average volume, and the ratio between them as a proxy for unusual activity</li>
-    <li><strong>Macroeconomic conditions:</strong> VIX (VIXCLS), Federal Funds Rate (DFF), and Unemployment Rate (UNRATE) from FRED, all forward-filled to align with daily trading data</li>
+    <li><strong>Yahoo Finance</strong> (<a href="https://finance.yahoo.com" target="_blank">finance.yahoo.com</a>) — daily OHLCV (Open, High, Low, Close, Volume) price data for six U.S. sector ETFs, collected via the <code>yfinance</code> Python library</li>
+    <li><strong>Federal Reserve Economic Data (FRED)</strong> (<a href="https://fred.stlouisfed.org" target="_blank">fred.stlouisfed.org</a>) — three macroeconomic series: VIX (series <a href="https://fred.stlouisfed.org/series/VIXCLS" target="_blank">VIXCLS</a>), Federal Funds Rate (<a href="https://fred.stlouisfed.org/series/DFF" target="_blank">DFF</a>), and Unemployment Rate (<a href="https://fred.stlouisfed.org/series/UNRATE" target="_blank">UNRATE</a>), forward-filled to daily trading frequency</li>
   </ul>
-  <p>
-    The target variable is a <strong>binary volatility regime label</strong>: each observation is classified as "High" if its 20-day forward realized volatility exceeds the SPY median (approximately 14.8% annualized), and "Normal" otherwise. For data cleaning, rows with missing values resulting from rolling-window calculations (requiring at least 200 trading days of history) were dropped, and pre-2015 data were excluded due to incomplete FRED series coverage. The FRED macro series were merged by date and forward-filled across weekends and holidays.
-  </p>
 
   <table class="data-table">
-    <tr><th>ETF</th><th>Sector</th><th>Observations</th><th>Role</th></tr>
-    <tr><td>SPY</td><td>S&amp;P 500</td><td>~2,637</td><td>Market benchmark</td></tr>
-    <tr><td>XLK</td><td>Technology</td><td>~2,637</td><td>Growth / rate-sensitive</td></tr>
-    <tr><td>XLF</td><td>Financials</td><td>~2,637</td><td>Rate beneficiary</td></tr>
-    <tr><td>XLE</td><td>Energy</td><td>~2,637</td><td>Commodity-linked, high volatility</td></tr>
-    <tr><td>XLV</td><td>Healthcare</td><td>~2,637</td><td>Defensive sector</td></tr>
-    <tr><td>XLY</td><td>Consumer Discretionary</td><td>~2,637</td><td>Consumer confidence proxy</td></tr>
+    <tr><th>ETF</th><th>Sector</th><th>Observations</th><th>Role in Analysis</th></tr>
+    <tr><td><strong style="color:#1a5276">SPY</strong></td><td>S&amp;P 500 (Benchmark)</td><td>~2,637</td><td>Market-wide reference; regime threshold calibrated to SPY median volatility</td></tr>
+    <tr><td><strong style="color:#6c3483">XLK</strong></td><td>Technology</td><td>~2,637</td><td>Growth / rate-sensitive; most affected by Fed rate hikes</td></tr>
+    <tr><td><strong style="color:#1e8449">XLF</strong></td><td>Financials</td><td>~2,637</td><td>Rate beneficiary; profits from rising interest rates</td></tr>
+    <tr><td><strong style="color:#b9770e">XLE</strong></td><td>Energy</td><td>~2,637</td><td>Commodity-linked; highest standalone volatility in the dataset</td></tr>
+    <tr><td><strong style="color:#c0392b">XLV</strong></td><td>Healthcare</td><td>~2,637</td><td>Defensive sector; lowest sensitivity to macro regime shifts</td></tr>
+    <tr><td><strong style="color:#2874a6">XLY</strong></td><td>Consumer Discretionary</td><td>~2,637</td><td>Consumer confidence proxy; sensitive to both growth and rates</td></tr>
   </table>
 
-  <p class="muted">
-    Data sources: Yahoo Finance REST API (daily OHLCV), FRED (VIX: VIXCLS, Fed Funds Rate: DFF,
-    Unemployment: UNRATE). Volatility regimes are defined using a binary median-split on 20-day forward
-    realized volatility. All features are computed using rolling windows and standard financial formulas.
+  <p class="muted" style="margin-top:8px;">
+    The ETF colors above are used consistently across all five visualizations on this page. The same color always refers to the same sector.
+  </p>
+
+  <h3>Data Cleaning</h3>
+  <p>
+    Three cleaning steps were applied before analysis. First, the first 200 rows per ETF were dropped to allow
+    200-day rolling window calculations (used for moving averages and long-term volatility) to stabilize.
+    Second, the FRED macro series were merged with trading-day data by date and forward-filled across weekends
+    and public holidays, since FRED publishes on calendar days while equity markets only trade on business days.
+    Third, any remaining rows with missing values were removed. The final dataset retains 15,822 of the
+    original ~16,200 rows.
+  </p>
+
+  <h3>Feature Groups</h3>
+  <p>
+    The 28 engineered features are organized into five thematic groups. Key features most central to this
+    analysis are marked with an asterisk (*).
+  </p>
+  <ul style="margin: 0 0 14px 1.4em; line-height: 2.1;">
+    <li><strong>Price and return features:</strong> daily close price, daily return (*), 5-day, 20-day, and 63-day cumulative price change. These capture the raw market signal before any transformation.</li>
+    <li><strong>Volatility measures:</strong> 20-day realized volatility (*), 5-, 10-, and 50-day variants, short/long volatility ratio (10d/50d) (*), and short/medium term structure ratio (5d/20d). The 20-day measure is used to define the regime label; the ratio captures whether volatility is rising or falling relative to its recent history.</li>
+    <li><strong>Technical indicators:</strong> RSI (14-day), Bollinger Band width (*) and position, ATR ratio (*), 10-day and 50-day moving average distances, price-to-200-day MA ratio (*), MA crossover signal, and 1-, 3-, and 6-month momentum scores (*). The 6-month momentum and price-to-200-day MA are the two most predictive technical features in the Random Forest model.</li>
+    <li><strong>Volume signals:</strong> 10-day average volume, 50-day average volume, and their ratio as a proxy for unusually high or low trading activity relative to recent norms.</li>
+    <li><strong>Macroeconomic conditions:</strong> VIX (*), Federal Funds Rate (*), and Unemployment Rate. These are the only features that are not derived from price data — when available in the model, VIX and Fed Funds Rate rank among the top predictors of regime classification.</li>
+  </ul>
+
+  <h3>Regime Label</h3>
+  <p>
+    The binary target variable is computed as follows: for each day, 20-day <em>forward</em> realized volatility
+    is calculated (i.e., the volatility of the next 20 trading days). If that value exceeds the SPY median
+    across the full dataset (approximately 14.8% annualized), the day is labeled <strong>High</strong> volatility;
+    otherwise <strong>Normal</strong>. Using a median split produces a near-50/50 class balance by construction,
+    which is why observation counts in the distribution chart are always roughly equal between regimes.
   </p>
 
   <div class="term-box">
-    <h4>Key Terms</h4>
+    <h4>Key Terms and Abbreviations</h4>
     <p><strong>S&amp;P 500:</strong> the Standard &amp; Poor's 500 index, a benchmark tracking 500 large U.S. publicly traded companies, widely used as a proxy for the overall U.S. stock market.</p>
-    <p><strong>ETF (Exchange-Traded Fund):</strong> a basket of securities that trades on an exchange like a single stock. Sector ETFs like XLK or XLE hold companies from one industry, letting investors gain exposure to that sector in a single trade.</p>
-    <p><strong>Volatility:</strong> how much prices move up and down over time. Higher volatility means larger day-to-day swings.</p>
-    <p><strong>Volatility regime:</strong> a period when market returns are relatively calm or unusually turbulent.</p>
-    <p><strong>Correlation:</strong> how similarly two sectors move. Higher correlation means they move more alike.</p>
-    <p><strong>Drawdown:</strong> the percentage drop from a previous peak in portfolio value.</p>
-    <p><strong>VIX:</strong> the CBOE Volatility Index, a commonly used market "fear gauge" that measures expected near-term price swings based on S&amp;P 500 options pricing.</p>
-    <p><strong>RSI (Relative Strength Index):</strong> a technical indicator that measures how fast prices have moved recently, on a 0&ndash;100 scale. Values above 70 suggest overbought conditions; below 30 suggests oversold.</p>
+    <p><strong>ETF (Exchange-Traded Fund):</strong> a basket of securities that trades on an exchange like a single stock. Sector ETFs like XLK or XLE hold companies from one industry.</p>
+    <p><strong>OHLCV:</strong> Open, High, Low, Close, Volume — the five standard fields in daily price data. We use Close and Volume directly; High and Low are used to compute ATR.</p>
+    <p><strong>Volatility:</strong> how much a security's price moves up and down. Measured here as the annualized standard deviation of daily returns over a rolling window.</p>
+    <p><strong>Volatility regime:</strong> an extended period when market returns are either relatively calm (Normal) or unusually turbulent (High).</p>
+    <p><strong>VIX:</strong> the CBOE Volatility Index — a real-time market "fear gauge" derived from S&amp;P 500 options pricing, reflecting expected near-term volatility. Published by FRED as series VIXCLS.</p>
+    <p><strong>DFF:</strong> the Federal Funds Rate — the overnight interest rate set by the Federal Reserve. One of the strongest predictors in our regime classifier.</p>
+    <p><strong>UNRATE:</strong> the U.S. Unemployment Rate, published monthly by the Bureau of Labor Statistics and available via FRED.</p>
+    <p><strong>ATR (Average True Range):</strong> a measure of daily price range — how far a security moves from its high to its low in a typical day. Higher ATR means more intraday turbulence.</p>
+    <p><strong>RSI (Relative Strength Index):</strong> a momentum indicator on a 0&ndash;100 scale. Values above 70 suggest a security is overbought; below 30 suggests oversold.</p>
+    <p><strong>Bollinger Band:</strong> a volatility envelope drawn two standard deviations above and below a 20-day moving average. Band width widens when volatility rises.</p>
+    <p><strong>MA (Moving Average):</strong> the average of a security's price over the past N days. We use 10-day, 50-day, and 200-day MAs. A price far above its 200-day MA signals an extended uptrend.</p>
+    <p><strong>Drawdown:</strong> the percentage decline from a portfolio's most recent peak value. A max drawdown of -34% means the portfolio fell 34% from its highest point.</p>
+    <p><strong>Sharpe Ratio:</strong> annualized return divided by annualized volatility of returns. A higher Sharpe means more return per unit of risk taken.</p>
+    <p><strong>Correlation:</strong> a measure from -1 to 1 of how similarly two sectors move. A value of 1.0 means they move in perfect lockstep; 0 means no relationship.</p>
   </div>
 </section>
 
@@ -386,6 +420,7 @@
       <span class="viz-badge badge-interactive">Interactive</span>
     </h3>
     <p class="muted">This heatmap shows how similarly sectors move under different volatility regimes. Click the regime buttons to compare calm and turbulent markets. Each cell shows the correlation between two sectors: values near 1.0 mean they move almost identically; values near 0.5 mean they move more independently.</p>
+    <p class="muted"><strong>Note on color scale:</strong> A diverging red-white-blue colormap is used. The scale is clamped to 0.5–1.0 (the actual data range) rather than the full -1 to 1 theoretical range — using the full range would make all cells identically deep red with no visible distinction. The white midpoint of the colormap corresponds to 0.75 (mid-range of the data), not 0. Red indicates stronger co-movement; blue/white indicates more independent movement.</p>
     <p class="muted"><strong>What to look for:</strong> Click "High volatility" and compare to "Normal volatility." Watch how the colors deepen — sectors that appeared somewhat independent in calm markets become tightly linked during stress. Energy (XLE) is the most distinct sector: notice how its row and column stay lighter than the others.</p>
 
     <div class="controls-row">
