@@ -330,11 +330,14 @@
 
   <div class="term-box">
     <h4>Key Terms</h4>
+    <p><strong>S&amp;P 500:</strong> the Standard &amp; Poor's 500 index, a benchmark tracking 500 large U.S. publicly traded companies, widely used as a proxy for the overall U.S. stock market.</p>
+    <p><strong>ETF (Exchange-Traded Fund):</strong> a basket of securities that trades on an exchange like a single stock. Sector ETFs like XLK or XLE hold companies from one industry, letting investors gain exposure to that sector in a single trade.</p>
     <p><strong>Volatility:</strong> how much prices move up and down over time. Higher volatility means larger day-to-day swings.</p>
     <p><strong>Volatility regime:</strong> a period when market returns are relatively calm or unusually turbulent.</p>
     <p><strong>Correlation:</strong> how similarly two sectors move. Higher correlation means they move more alike.</p>
     <p><strong>Drawdown:</strong> the percentage drop from a previous peak in portfolio value.</p>
-    <p><strong>VIX:</strong> a commonly used market "fear gauge."</p>
+    <p><strong>VIX:</strong> the CBOE Volatility Index, a commonly used market "fear gauge" that measures expected near-term price swings based on S&amp;P 500 options pricing.</p>
+    <p><strong>RSI (Relative Strength Index):</strong> a technical indicator that measures how fast prices have moved recently, on a 0&ndash;100 scale. Values above 70 suggest overbought conditions; below 30 suggests oversold.</p>
   </div>
 </section>
 
@@ -349,10 +352,11 @@
       <span class="viz-badge badge-interactive">Interactive</span>
       <span class="viz-badge badge-linked">&#8594; Links to Viz 5</span>
     </h3>
-    <p class="muted"><strong style="color:var(--blue);">&#9432; Interaction:</strong> Drag the shaded region on the <em>overview chart at the bottom</em> to zoom into any date range. Hover over the lines for exact values. Click and drag again to reset.</p>
+    <p class="muted"><strong style="color:var(--blue);">&#9432; Interaction:</strong> Drag the shaded region on the <em>overview chart at the bottom</em> to zoom into any date range. Hover over any line for the exact price, volatility, and regime label on that date. Click and drag again to reset.</p>
     <div class="link-banner">
       <strong>Cross-viz link:</strong> Drag a time window in the overview below and the Return Distribution chart (Viz 5) will automatically update to show only returns from that period.
     </div>
+    <p class="muted"><strong>What to look for:</strong> Watch how the six colored lines diverge during crash periods (2020, 2022). Lines that fall sharply and recover slowly are the most volatile sectors. The color legend appears in the top-right of the chart; each line color corresponds to one ETF and is used consistently across the entire site.</p>
     <div class="viz-container" id="viz1-container" style="min-height:520px;"></div>
     <div class="takeaway">
       <strong>Takeaway:</strong> Three distinct high-volatility regimes are visible in the data: the 2018 Q4 rate-scare, the March 2020 COVID crash, and the 2022 rate-hike bear market. These regimes are not symmetric across sectors. During COVID, all six ETFs declined in lockstep within days of each other, but by end of 2020, XLK had fully recovered and surpassed its pre-crash level while XLE was still down over 30% from its January 2020 price. In the 2022 episode, the divergence ran the other direction: XLE gained roughly 60% over the year as energy prices surged, while XLK fell more than 30% as rate hikes compressed growth valuations. The volatility subplot reinforces this: during the March 2020 spike, all sector volatilities converged near 60&ndash;80% annualized, but during normal periods XLE's rolling volatility runs roughly 2&times; that of XLV.
@@ -366,7 +370,8 @@
       <span class="viz-badge badge-altair">Altair</span>
       <span class="viz-badge badge-static">Static</span>
     </h3>
-    <p class="muted">This chart ranks the top 15 features that help classify high- versus normal-volatility regimes. <strong style="color:var(--blue);">&#9432; Interaction:</strong> Hover any bar to see a plain-English description of what that feature measures.</p>
+    <p class="muted">This chart shows the results of a <a href="https://en.wikipedia.org/wiki/Random_forest" target="_blank">Random Forest</a> classifier trained to distinguish high- versus normal-volatility regimes. A Random Forest is a machine learning algorithm that builds many decision trees on random subsets of the data and averages their predictions. Each bar shows how much a given feature contributed to the classifier's accuracy — higher means the model relied on it more to correctly identify which regime a day belongs to. <strong style="color:var(--blue);">&#9432; Interaction:</strong> Hover any bar to see a plain-English description of what that feature measures.</p>
+    <p class="muted"><strong>What to look for:</strong> The color of each bar tells you its category (red = macroeconomic, orange = volatility, blue = momentum). Notice whether the top-ranked features are macro-driven or purely technical — this reveals whether volatility regimes are predictable from economic conditions or only from recent price behavior.</p>
     <div class="viz-container" id="viz3-container" style="min-height:420px;"></div>
     <div class="takeaway">
       <strong>Takeaway:</strong> The top two features, 20-day realized volatility (10.3%) and ATR ratio (9.7%), are both direct measures of recent price turbulence, which makes sense: a regime model trained to predict future volatility naturally leans on current volatility. More interesting is what comes after: 6-month momentum (7.3%) and Price/200-day MA (8.5%) outrank shorter-term signals entirely, suggesting that regime shifts are associated with extended trend breakdowns rather than short-term noise. Crucially, the bottom half of the chart is dominated by momentum and moving-average variants that all measure roughly the same thing (price trend relative to a baseline), which means the model's effective information comes from fewer independent signals than the feature count suggests. If the FRED macro series (Fed Funds Rate, VIX) were available in this run, prior versions of the model showed them ranking in the top 3, displacing the pure volatility features. This distinction matters: a model that leads with current volatility is reactive; one that leads with policy rate and VIX levels could in principle be forward-looking.
@@ -380,7 +385,8 @@
       <span class="viz-badge badge-d3">D3</span>
       <span class="viz-badge badge-interactive">Interactive</span>
     </h3>
-    <p class="muted">This heatmap shows how similarly sectors move under different volatility regimes. Click the regime buttons to compare calm and turbulent markets.</p>
+    <p class="muted">This heatmap shows how similarly sectors move under different volatility regimes. Click the regime buttons to compare calm and turbulent markets. Each cell shows the correlation between two sectors: values near 1.0 mean they move almost identically; values near 0.5 mean they move more independently.</p>
+    <p class="muted"><strong>What to look for:</strong> Click "High volatility" and compare to "Normal volatility." Watch how the colors deepen — sectors that appeared somewhat independent in calm markets become tightly linked during stress. Energy (XLE) is the most distinct sector: notice how its row and column stay lighter than the others.</p>
 
     <div class="controls-row">
       <button class="ctrl-btn active" id="hm-all" onclick="updateHeatmap('all')">All periods</button>
@@ -406,7 +412,7 @@
       <span class="viz-badge badge-interactive">Interactive</span>
     </h3>
     <p class="muted">This chart compares a regime-aware dynamic allocation strategy with buy-and-hold. Use the sliders to tune the equity allocation during each regime and find the tradeoff that works for you. The chart updates live as you drag.</p>
-    <p class="muted"><strong>What to look for:</strong> The solid line is the tunable strategy; the dashed line is buy-and-hold. Watch how changing the high-volatility allocation (bottom slider) affects both the crash depth and the final return. The stats panel updates in real time.</p>
+    <p class="muted"><strong>What to look for:</strong> The solid line is the tunable strategy; the dashed line is buy-and-hold. Watch how the high-volatility allocation slider affects crash depth vs. final return. Use "Find max-Sharpe allocation" to see the optimal split for each ETF.</p>
 
     <div style="background:#f9f8f5;border:1px solid var(--border);border-radius:8px;padding:16px 20px;margin-bottom:16px;">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:12px;">
@@ -459,6 +465,7 @@
       <span class="viz-badge badge-linked">&#8592; Linked from Viz 1</span>
     </h3>
     <p class="muted">This histogram compares daily return distributions under normal and high volatility. Blue bars represent normal volatility and red bars represent high volatility. Select a sector and optionally filter by year, or drag a time window in Viz 1 to filter by date range automatically.</p>
+    <p class="muted"><strong>What to look for:</strong> Compare the width of the red vs. blue histogram — wider means more extreme daily returns. Check the stats panel: the means are often surprisingly similar between regimes, meaning high-vol periods are noisier but not systematically directional. Try switching between XLE (Energy) and XLV (Healthcare) to see the contrast in volatility profiles.</p>
 
     <div class="controls-row">
       <label for="dist-sector">Sector:</label>
@@ -489,7 +496,7 @@
     <div id="dist-stats" class="stats-row"></div>
 
     <div class="takeaway">
-      <strong>Takeaway:</strong> For XLE across all years, normal-regime daily returns have a mean of 0.014% and a standard deviation of 1.024%. High-volatility periods have a mean of 0.001% and a standard deviation of 1.826%. Two things stand out. First, the standard deviation rises by about 80% between regimes, not doubles — the distributions overlap substantially, which is why the histograms look similar in shape rather than one being dramatically wider. Second, and more importantly, the means are nearly identical. High-volatility regimes are not periods where XLE is expected to fall — they are periods where returns become noisier. This matters for how the portfolio strategy in Viz 4 should be interpreted: reducing exposure during high-vol regimes is not about avoiding a directional loss, it is about reducing exposure to large swings in either direction. The roughly equal observation counts (around 1,300 per regime) are intentional — the regime label uses a median split on forward volatility, so by construction it produces a near-50/50 split. Switching to XLV shows narrower distributions and a smaller gap between regimes, consistent with Healthcare being a lower-volatility sector.
+      <strong>Takeaway:</strong> The stats panel below the chart is the most important part of this visualization — read it alongside the histogram rather than relying on visual impression alone. A few patterns worth looking for across sectors and years. First, check whether the standard deviations differ substantially between regimes: a large gap means the regime label is capturing real differences in how turbulent trading days are. Second, check the means — they are often surprisingly similar or even higher in the high-volatility regime. This happens because the regime label is defined on 20-day <em>forward</em> volatility, not current volatility, so high-vol days include early recovery periods when prices bounce hard and volatility is still elevated. High-vol regimes are not reliably negative-return periods; they are high-variance periods. Third, the observation counts are always close to 50/50 by design: the regime label uses a median split, so roughly half of all days in the dataset fall into each regime. What changes when you filter by year is the <em>composition</em> — in a crash year like 2020, almost all the high-vol observations cluster in a few months, producing much more dramatic separation in the histogram than the all-years average suggests.
     </div>
   </div>
 </section>
@@ -513,6 +520,11 @@
   <div class="conclusion-card">
     <h4>3. Regime-aware allocation reduces drawdown meaningfully, but the label timing problem is real</h4>
     <p>The dynamic strategy's max drawdown reduction (from -34% to -22% for SPY, from -60% to -38% for XLE) is economically significant. But the strategy uses a label defined on 20-day <em>forward</em> volatility, which means it has perfect foresight of when regimes begin and end. A live implementation would detect regime shifts with a lag of days to weeks, eroding both the drawdown benefit and the already-thin total-return cost. The right interpretation of Viz 4 is therefore not "this strategy works" but rather "this is the upper bound on what regime-aware allocation could achieve with perfect detection, and even then the cost in total return is real and sector-dependent."</p>
+  </div>
+
+  <div class="conclusion-card" style="border-left-color:var(--blue-light);">
+    <h4>What this means for investors</h4>
+    <p>Three practical takeaways follow from this analysis. First, sector allocation should be regime-aware: during high-volatility regimes, the diversification between sectors largely disappears, so holding a spread of sector ETFs provides much less protection than it appears to during calm periods. Second, timing of regime detection matters as much as the detection itself — the portfolio strategy in Viz 4 uses a forward-looking label, making it an upper bound on what is achievable in practice. A live rule would lag by days to weeks, reducing both the drawdown benefit and the return cost. Third, Energy (XLE) behaves differently from other sectors in almost every dimension: lowest correlations with peers, most asymmetric response to macro regimes, and the highest standalone volatility. For investors seeking cross-sector diversification, XLE is the most consistent diversifier in this dataset — but also the most volatile position to hold through a crash.</p>
   </div>
 
   <div class="conclusion-card" style="border-left-color:var(--teal);">
@@ -639,7 +651,9 @@ function buildViz1() {
             x: { field: 'date', type: 'temporal', title: '', scale: { domain: { param: 'brush' } } },
             y: { field: 'price_norm', type: 'quantitative', title: 'Normalized price', scale: { zero: false } },
             color: { field: 'ticker', type: 'nominal', title: 'ETF',
-              scale: { domain: TICKERS, range: TICKERS.map(t => COLORS[t]) } },
+              scale: { domain: TICKERS, range: TICKERS.map(t => COLORS[t]) },
+              legend: { title: 'Sector ETF', orient: 'right', labelFontSize: 11, titleFontSize: 11, symbolSize: 120 }
+            },
             tooltip: [
               { field: 'date', type: 'temporal', title: 'Date', format: '%b %d, %Y' },
               { field: 'ticker', type: 'nominal', title: 'ETF' },
@@ -755,7 +769,12 @@ function buildViz2() {
 
   const x = d3.scaleBand().domain(TICKERS).range([0, size]).padding(0.06);
   const y = d3.scaleBand().domain(TICKERS).range([0, size]).padding(0.06);
-  const getColor = v => d3.interpolateRdBu(1 - (v + 1) / 2);
+  // Clamp to actual data range (0.5–1.0) — using full -1 to 1 compresses all cells into identical deep red
+  const colorMin = 0.5, colorMax = 1.0;
+  const getColor = v => {
+    const t = Math.max(0, Math.min(1, (v - colorMin) / (colorMax - colorMin)));
+    return d3.interpolateRdBu(1 - t);
+  };
 
   function pearson(a, b) {
     const n = a.length; if (n < 3) return 0;
@@ -805,10 +824,10 @@ function buildViz2() {
   const lw=18, lh=size;
   const defs = svg.append('defs');
   const grad = defs.append('linearGradient').attr('id','lg').attr('x1','0%').attr('y1','100%').attr('x2','0%').attr('y2','0%');
-  d3.range(0,1.01,0.1).forEach(t=>{grad.append('stop').attr('offset',t*100+'%').attr('stop-color',getColor(t*2-1));});
+  d3.range(0,1.01,0.1).forEach(t=>{grad.append('stop').attr('offset',t*100+'%').attr('stop-color',getColor(colorMin + t*(colorMax-colorMin)));});
   const leg = svg.append('g').attr('transform',`translate(${margin.left+size+20},${margin.top})`);
   leg.append('rect').attr('width',lw).attr('height',lh).style('fill','url(#lg)').attr('rx',3);
-  const la = d3.axisRight(d3.scaleLinear().domain([-1,1]).range([lh,0])).ticks(5).tickFormat(d3.format('.1f'));
+  const la = d3.axisRight(d3.scaleLinear().domain([colorMin,colorMax]).range([lh,0])).ticks(5).tickFormat(d3.format('.1f'));
   leg.append('g').attr('transform',`translate(${lw},0)`).call(la).selectAll('text').style('font-size','10px');
   leg.append('text').attr('x',lw/2).attr('y',-12).attr('text-anchor','middle').style('font-size','10px').style('font-weight','600').text('Correlation');
 
