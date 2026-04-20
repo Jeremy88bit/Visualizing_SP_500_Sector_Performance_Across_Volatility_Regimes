@@ -1028,9 +1028,11 @@ function updatePortfolio() {
     bPeak = Math.max(bPeak, v.buyhold);  bDD = Math.min(bDD, (v.buyhold-bPeak)/bPeak);
   });
 
-  // Sharpe ratios
+  // Sharpe ratios — compute from actual daily percentage returns
   const rows = pfRawRows[sel] || [];
-  const sReturns = rows.map((d,i) => { if(!pfData[sel]||i===0) return 0; return pfData[sel][i].strategy - pfData[sel][i-1].strategy; });
+  const nv = +document.getElementById('normal-alloc').value / 100;
+  const hv = +document.getElementById('high-alloc').value / 100;
+  const sReturns = rows.map(d => d.returns * (d.regime === 0 ? nv : hv));
   const bReturns = rows.map(d => d.returns);
   const sSharpe = calcSharpe(sReturns).toFixed(2);
   const bSharpe = calcSharpe(bReturns).toFixed(2);
