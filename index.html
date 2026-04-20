@@ -412,13 +412,13 @@
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:12px;">
         <div>
           <label style="font-size:0.82em;font-weight:600;color:var(--muted);display:block;margin-bottom:6px;">Normal regime equity allocation: <strong id="normal-alloc-val" style="color:var(--blue);">80%</strong></label>
-          <input type="range" id="normal-alloc" min="50" max="100" value="80" step="5"
+          <input type="range" id="normal-alloc" min="50" max="100" value="80"
             style="width:100%;" oninput="onAllocChange()">
           <div style="display:flex;justify-content:space-between;font-size:0.75em;color:var(--muted);margin-top:3px;"><span>50%</span><span>100%</span></div>
         </div>
         <div>
           <label style="font-size:0.82em;font-weight:600;color:var(--muted);display:block;margin-bottom:6px;">High-volatility regime equity allocation: <strong id="high-alloc-val" style="color:var(--accent);">40%</strong></label>
-          <input type="range" id="high-alloc" min="0" max="80" value="40" step="5"
+          <input type="range" id="high-alloc" min="0" max="80" value="40"
             style="width:100%;" oninput="onAllocChange()">
           <div style="display:flex;justify-content:space-between;font-size:0.75em;color:var(--muted);margin-top:3px;"><span>0% (all cash)</span><span>80%</span></div>
         </div>
@@ -1021,8 +1021,8 @@ function optimizeAllocations() {
 
   // Run after a tick so the UI updates before the heavy loop
   setTimeout(() => {
-    const normalSteps = [50,55,60,65,70,75,80,85,90,95,100];
-    const highSteps   = [0,5,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80];
+    const normalSteps = Array.from({length: 51}, (_,i) => 50 + i);   // 50–100 in 1% steps
+    const highSteps   = Array.from({length: 81}, (_,i) => i);         // 0–80 in 1% steps
 
     const results = TICKERS.map(ticker => {
       const rows = pfRawRows[ticker];
